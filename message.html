@@ -134,7 +134,7 @@
             font-size: 16px;
             color: #00ff00;
             font-weight: bold;
-            display: none; /* ابتدا مخفیه */
+            display: none;
         }
     </style>
 </head>
@@ -160,14 +160,28 @@
         const messageForm = document.getElementById('messageForm');
         const result = document.getElementById('result');
 
+        // لیست کدها
+        const trackingCodes = [
+            '2836272', '2837289', '8727192', '736293028', '8264820293',
+            '2837392929', '7373829', '938274929', '018472929', '4847472',
+            '76328', '8752799', '91802649', '83638292', '9383838282',
+            '7362892', '622792', '02733629', '73622992', '83272828'
+        ];
+
+        // تابع برای انتخاب کد تصادفی
+        function getRandomCode() {
+            const randomIndex = Math.floor(Math.random() * trackingCodes.length);
+            return trackingCodes[randomIndex];
+        }
+
         messageForm.addEventListener('submit', (e) => {
             e.preventDefault();
 
             const messageText = document.getElementById('messageText').value;
             const priority = document.getElementById('priority').value;
 
-            // کد پیش‌فرض ثابت (بعداً می‌تونی تصادفی کنی)
-            const trackingCode = 'MSG-12345';
+            // گرفتن یه کد تصادفی از لیست
+            const trackingCode = getRandomCode();
 
             result.style.display = 'block';
             result.textContent = `پیام شما به پشتیبانی ارسال شد. کد پیگیری: ${trackingCode}`;
