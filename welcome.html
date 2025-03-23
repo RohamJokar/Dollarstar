@@ -17,6 +17,7 @@
             align-items: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #1e1e2f, #3a3a5a, #2a2a4a);
+            position: relative;
         }
 
         .welcome-box {
@@ -54,7 +55,8 @@
         h1 {
             color: #fff;
             font-size: 36px;
-            margin-bottom: 20px;
+            margin-top: -20px; /* پیام رو بالاتر بردم */
+            margin-bottom: 40px; /* فاصله با بقیه محتوا */
             text-transform: uppercase;
             letter-spacing: 3px;
             text-shadow: 0 0 10px rgba(0, 255, 210, 0.7);
@@ -71,12 +73,83 @@
             font-size: 18px;
             line-height: 1.5;
         }
+
+        /* منوی کشویی */
+        .menu {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+
+        .menu-btn {
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .menu-btn:hover {
+            background: linear-gradient(90deg, #3a7bd5, #00d2ff);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.7);
+        }
+
+        .dropdown {
+            position: absolute;
+            top: 50px;
+            left: 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 200px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .menu:hover .dropdown {
+            max-height: 300px; /* باز شدن منو */
+        }
+
+        .dropdown a {
+            display: block;
+            padding: 15px 20px;
+            color: #e0e0e0;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown a:hover {
+            background: rgba(0, 210, 255, 0.2);
+            color: #fff;
+            padding-left: 25px; /* یه جابه‌جایی کوچیک برای افکت */
+        }
     </style>
 </head>
 <body>
     <div class="welcome-box">
         <h1>خوش اومدی، User72!</h1>
         <p>ورودت موفقیت‌آمیز بود. اینجا صفحه اختصاصی توئه!</p>
+    </div>
+
+    <!-- منوی کشویی -->
+    <div class="menu">
+        <button class="menu-btn">منو</button>
+        <div class="dropdown">
+            <a href="#">پیام به مدیریت</a>
+            <a href="#">پیگیری پی‌پال</a>
+            <a href="#">پیگیری سرور مجازی</a>
+            <a href="#">پیگیری تبدیل دلار به ریال</a>
+            <a href="#">ثبت انتقاد</a>
+        </div>
     </div>
 </body>
 </html>
