@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>پیام به مدیریت</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1e1e2f, #3a3a5a, #2a2a4a);
+        }
+
+        .message-box {
+            position: relative;
+            width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .message-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(0, 255, 210, 0.2), rgba(255, 255, 255, 0));
+            transform: rotate(45deg);
+            pointer-events: none;
+            animation: shine 5s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: rotate(45deg) translate(-30%, -30%); }
+            50% { transform: rotate(45deg) translate(30%, 30%); }
+            100% { transform: rotate(45deg) translate(-30%, -30%); }
+        }
+
+        h2 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(0, 255, 210, 0.7);
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 16px;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        textarea:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        textarea::placeholder {
+            color: #b0b0b0;
+        }
+
+        .priority {
+            margin-bottom: 20px;
+        }
+
+        .priority label {
+            color: #e0e0e0;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .priority select {
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .priority select:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(90deg, #3a7bd5, #00d2ff);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.7);
+            transform: translateY(-2px);
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 16px;
+            color: #00ff00;
+            font-weight: bold;
+            display: none; /* ابتدا مخفیه */
+        }
+    </style>
+</head>
+<body>
+    <div class="message-box">
+        <h2>پیام به مدیریت</h2>
+        <form id="messageForm">
+            <textarea id="messageText" placeholder="پیامت رو اینجا بنویس" required></textarea>
+            <div class="priority">
+                <label>اولویت:</label>
+                <select id="priority" required>
+                    <option value="کم">کم</option>
+                    <option value="متوسط" selected>متوسط</option>
+                    <option value="زیاد">زیاد</option>
+                </select>
+            </div>
+            <button type="submit">ارسال</button>
+        </form>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        const messageForm = document.getElementById('messageForm');
+        const result = document.getElementById('result');
+
+        messageForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            const messageText = document.getElementById('messageText').value;
+            const priority = document.getElementById('priority').value;
+
+            // کد پیش‌فرض ثابت (بعداً می‌تونی تصادفی کنی)
+            const trackingCode = 'MSG-12345';
+
+            result.style.display = 'block';
+            result.textContent = `پیام شما به پشتیبانی ارسال شد. کد پیگیری: ${trackingCode}`;
+
+            // ریست فرم بعد از ارسال
+            messageForm.reset();
+        });
+    </script>
+</body>
+</html>
