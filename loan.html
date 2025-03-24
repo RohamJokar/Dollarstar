@@ -60,6 +60,22 @@
             from { opacity: 0; transform: translateY(-20px); }
             to { opacity: 1; transform: translateY(0); }
         }
+        .section-title {
+            color: #fff;
+            font-size: 32px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 140, 0, 0.5);
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.2));
+            padding: 10px 20px;
+            border-radius: 10px;
+            animation: pulseTitle 2s infinite;
+        }
+        @keyframes pulseTitle {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+            100% { transform: scale(1); }
+        }
         .amount-options, .type-options {
             display: flex;
             justify-content: center;
@@ -187,12 +203,14 @@
 <body>
     <div class="loan-container">
         <h1>درخواست وام فوری</h1>
+        <div class="section-title">مبلغ وام</div>
         <div class="amount-options">
             <div class="option" data-amount="10000000">۱۰ میلیون</div>
             <div class="option" data-amount="15000000">۱۵ میلیون</div>
             <div class="option" data-amount="20000000">۲۰ میلیون</div>
             <div class="option" data-amount="25000000">۲۵ میلیون</div>
         </div>
+        <div class="section-title">نوع وام</div>
         <div class="type-options">
             <div class="option" data-type="toman">تومان</div>
             <div class="option" data-type="dollar">دلار</div>
