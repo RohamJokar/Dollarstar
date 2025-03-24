@@ -17,6 +17,7 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #1e1e2f, #3a3a5a, #2a2a4a);
             position: relative;
+            flex-direction: column;
         }
         .welcome-box {
             position: relative;
@@ -129,13 +130,48 @@
             color: #fff;
             padding-left: 25px;
         }
+
+        /* موزیک پلیر */
+        .music-player {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 30px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
+            color: #fff;
+        }
+
+        .music-player audio {
+            width: 100%;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        .music-player button {
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .music-player button:hover {
+            background: linear-gradient(90deg, #3a7bd5, #00d2ff);
+            box-shadow: 0 0 15px rgba(0, 210, 255, 0.7);
+        }
     </style>
 </head>
 <body>
     <div class="welcome-box">
         <h1>خوش اومدی، User72!</h1>
         <p>ورودت موفقیت‌آمیز بود. اینجا صفحه اختصاصی توئه!</p>
-        <!-- نمایش ساعت آنلاین -->
         <div id="clock" class="clock"></div>
     </div>
 
@@ -149,6 +185,15 @@
             <a href="#">پیگیری تبدیل دلار به ریال</a>
             <a href="#">ثبت انتقاد</a>
         </div>
+    </div>
+
+    <!-- موزیک پلیر -->
+    <div class="music-player">
+        <audio id="music-player" controls>
+            <source src="https://irsv.upmusics.com/AliBZ/Marconi%20Union%20-%20Weightless%20(320).mp3" type="audio/mp3">
+            مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
+        </audio>
+        <button onclick="document.getElementById('music-player').play()">پخش موسیقی</button>
     </div>
 
     <script>
@@ -166,4 +211,4 @@
         updateClock();
     </script>
 </body>
-    </html>
+</html>
