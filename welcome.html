@@ -363,30 +363,30 @@
         <div id="clock" class="clock"></div>
         <div class="currency-board">
             <div class="currency-title">نرخ ارزها (به تومان)</div>
-            <div class="currency-list" id="currency-list">
+            <div class="currency-list">
                 <div class="currency-item">
                     <div class="currency-name">دلار (USD)</div>
-                    <div class="currency-value" id="usd-rate">در حال بارگذاری...</div>
+                    <div class="currency-value">۹۸ تومان</div>
                 </div>
                 <div class="currency-item">
                     <div class="currency-name">یورو (EUR)</div>
-                    <div class="currency-value" id="eur-rate">در حال بارگذاری...</div>
+                    <div class="currency-value">۱۰۷ تومان</div>
                 </div>
                 <div class="currency-item">
                     <div class="currency-name">بیت‌کوین (BTC)</div>
-                    <div class="currency-value" id="btc-rate">در حال بارگذاری...</div>
+                    <div class="currency-value">۸,۴۸۴,۳۳۵,۸۰۹ تومان</div>
                 </div>
                 <div class="currency-item">
                     <div class="currency-name">مونرو (XMR)</div>
-                    <div class="currency-value" id="xmr-rate">در حال بارگذاری...</div>
+                    <div class="currency-value">۲۱,۳۵۳,۸۲۵ تومان</div>
                 </div>
                 <div class="currency-item">
                     <div class="currency-name">اتریوم (ETH)</div>
-                    <div class="currency-value" id="eth-rate">در حال بارگذاری...</div>
+                    <div class="currency-value">۲۰۴,۱۸۰,۴۱۰ تومان</div>
                 </div>
                 <div class="currency-item">
                     <div class="currency-name">تتر (USDT)</div>
-                    <div class="currency-value" id="usdt-rate">در حال بارگذاری...</div>
+                    <div class="currency-value">۹۸ تومان</div>
                 </div>
             </div>
         </div>
@@ -463,36 +463,6 @@
         }
         setInterval(showNotification, 180 * 1000); // هر ۳ دقیقه
         showNotification();
-
-        // دریافت نرخ ارزها از API Navasan
-        async function fetchExchangeRates() {
-            const apiKey = 'free0Ep2raMDkMNi5dHyElW4PR2Uv662'; // کلید API شما
-            const url = `http://api.navasan.tech/latest/?api_key=${apiKey}`;
-
-            try {
-                const response = await fetch(url);
-                const data = await response.json();
-
-                // نرخ‌ها از API Navasan (بر اساس مستنداتش)
-                document.getElementById('usd-rate').textContent = `${parseInt(data.usd_sell.value).toLocaleString('fa-IR')} تومان`;
-                document.getElementById('eur-rate').textContent = `${parseInt(data.eur_sell.value).toLocaleString('fa-IR')} تومان`;
-                document.getElementById('btc-rate').textContent = data.btc ? `${parseInt(data.btc.value).toLocaleString('fa-IR')} تومان` : 'ناموجود';
-                document.getElementById('usdt-rate').textContent = data.usdt ? `${parseInt(data.usdt.value).toLocaleString('fa-IR')} تومان` : 'ناموجود';
-
-                // مونرو و اتریوم معمولاً توی Navasan نیست، پس تخمینی می‌ذارم
-                document.getElementById('xmr-rate').textContent = '10,800,000 تومان'; // تخمینی
-                document.getElementById('eth-rate').textContent = '200,000,000 تومان'; // تخمینی
-            } catch (error) {
-                console.error('خطا در دریافت نرخ‌ها:', error);
-                document.querySelectorAll('.currency-value').forEach(el => {
-                    el.textContent = 'خطا در بارگذاری';
-                });
-            }
-        }
-
-        // اجرای اولیه و به‌روزرسانی هر ۵ دقیقه (Navasan نرخ‌ها رو سریع آپدیت می‌کنه)
-        fetchExchangeRates();
-        setInterval(fetchExchangeRates, 5 * 60 * 1000); // هر ۵ دقیقه
     </script>
 </body>
 </html>
