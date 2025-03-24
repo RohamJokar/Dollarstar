@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>بازی دلاری - Snake</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a3a, #00d2ff, #ffd700);
+            overflow: hidden;
+        }
+        .game-container {
+            position: relative;
+            margin-top: 50px;
+            text-align: center;
+        }
+        h1 {
+            color: #fff;
+            font-size: 40px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .goal {
+            color: #ffd700;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 10px 20px;
+            border-radius: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        canvas {
+            border: 2px solid rgba(255, 215, 0, 0.5);
+            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.8);
+            box-shadow: 0 0 30px rgba(0, 210, 255, 0.5);
+        }
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(255, 215, 0, 0.1), rgba(0, 210, 255, 0.1));
+            pointer-events: none;
+            animation: shine 4s infinite;
+        }
+        @keyframes shine {
+            0% { transform: translateY(-50%); }
+            50% { transform: translateY(50%); }
+            100% { transform: translateY(-50%); }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1>بازی دلاری - Snake</h1>
+        <div class="goal">هدف امروز: ۹۰ دلار</div>
+        <canvas id="gameCanvas" width="600" height="400"></canvas>
+        <div class="overlay"></div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const gridSize = 20;
+        const tileCount = canvas.width / gridSize;
+        let snake = [{ x: 10, y: 10 }];
+        let food = { x: 15, y: 15 };
+        let dx = 0;
+        let dy = 0;
+        let score = 0;
+        let speed = 100; // سرعت بالا برای سختی بیشتر
+        let obstacles = [
+            { x: 5, y: 5 }, { x: 5, y: 6 }, { x: 5, y: 7 },
+            { x: 25, y: 15 }, { x: 25, y: 16 }, { x: 25, y: 17 },
+            { x: 15, y: 25 }, { x: 16, y: 25 }, { x: 17, y: 25 }
+        ]; // موانع ثابت
+
+        function drawGame() {
+            // حرکت مار
+            const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                score += 1;
+                generateFood();
+            } else {
+                snake.pop();
+            }
+
+            // چک کردن برخورد
+            if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount ||
+                snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y) ||
+                obstacles.some(ob => ob.x === head.x && ob.y === head.y)) {
+                alert('بازی تمام شد! امتیاز: ' + score);
+                snake = [{ x: 10, y: 10 }];
+                dx = 0;
+                dy = 0;
+                score = 0;
+                generateFood();
+            }
+
+            // رسم پس‌زمینه
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // رسم موانع
+            ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
+            obstacles.forEach(ob => {
+                ctx.beginPath();
+                ctx.arc(ob.x * gridSize + gridSize / 2, ob.y * gridSize + gridSize / 2, gridSize / 2, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // رسم مار با گرافیک
+            snake.forEach((segment, index) => {
+                ctx.fillStyle = index === 0 ? '#00d2ff' : '#3a7bd5';
+                ctx.beginPath();
+                ctx.arc(segment.x * gridSize + gridSize / 2, segment.y * gridSize + gridSize / 2, gridSize / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.strokeStyle = 'rgba(255, 215, 0, 0.5)';
+                ctx.stroke();
+            });
+
+            // رسم غذا
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            ctx.arc(food.x * gridSize + gridSize / 2, food.y * gridSize + gridSize / 2, gridSize / 2, 0, Math.PI * 2);
+            ctx.fill();
+
+            // نمایش امتیاز
+            ctx.fillStyle = '#fff';
+            ctx.font = '20px Arial';
+            ctx.fillText('امتیاز: ' + score, 10, 30);
+
+            setTimeout(drawGame, speed);
+        }
+
+        function generateFood() {
+            food.x = Math.floor(Math.random() * tileCount);
+            food.y = Math.floor(Math.random() * tileCount);
+            if (snake.some(segment => segment.x === food.x && segment.y === food.y) ||
+                obstacles.some(ob => ob.x === food.x && ob.y === food.y)) {
+                generateFood();
+            }
+        }
+
+        document.addEventListener('keydown', e => {
+            switch (e.key) {
+                case 'ArrowUp': if (dy === 0) { dx = 0; dy = -1; } break;
+                case 'ArrowDown': if (dy === 0) { dx = 0; dy = 1; } break;
+                case 'ArrowLeft': if (dx === 0) { dx = -1; dy = 0; } break;
+                case 'ArrowRight': if (dx === 0) { dx = 1; dy = 0; } break;
+            }
+        });
+
+        drawGame();
+    </script>
+</body>
+</html>
