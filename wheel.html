@@ -23,7 +23,7 @@
             text-align: center;
             position: relative;
             width: 100%;
-            max-width: 600px;
+            max-width: 550px;
             padding: 30px;
             background: rgba(0, 0, 0, 0.8);
             border-radius: 20px;
@@ -64,8 +64,8 @@
         }
         .wheel-wrapper {
             position: relative;
-            width: 350px;
-            height: 350px;
+            width: 300px;
+            height: 300px;
             margin: 0 auto;
         }
         #wheelCanvas {
@@ -77,14 +77,14 @@
         }
         .pointer {
             position: absolute;
-            top: -25px;
+            top: -20px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 15px solid transparent;
-            border-right: 15px solid transparent;
-            border-top: 30px solid #ffd700;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            border-top: 25px solid #ffd700;
             filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
             z-index: 10;
         }
@@ -159,7 +159,7 @@
         <div class="wheel-title">گردونه شانس</div>
         <div class="wheel-wrapper">
             <div class="pointer"></div>
-            <canvas id="wheelCanvas" width="350" height="350"></canvas>
+            <canvas id="wheelCanvas" width="300" height="300"></canvas>
         </div>
         <button class="spin-btn" id="spinBtn">چرخاندن</button>
         <div class="result" id="result"></div>
@@ -191,37 +191,37 @@
             for (let i = 0; i < segments; i++) {
                 ctx.beginPath();
                 if (colors[i].startsWith('linear-gradient')) {
-                    const gradient = ctx.createLinearGradient(175, 175, 275, 275);
+                    const gradient = ctx.createLinearGradient(150, 150, 250, 250);
                     gradient.addColorStop(0, '#ffd700');
                     gradient.addColorStop(1, '#ff8c00');
                     ctx.fillStyle = gradient;
                 } else {
                     ctx.fillStyle = colors[i];
                 }
-                ctx.moveTo(175, 175); // مرکز گردونه
-                ctx.arc(175, 175, 175, i * angle, (i + 1) * angle);
-                ctx.lineTo(175, 175);
+                ctx.moveTo(150, 150); // مرکز گردونه
+                ctx.arc(150, 150, 150, i * angle, (i + 1) * angle);
+                ctx.lineTo(150, 150);
                 ctx.fill();
                 ctx.strokeStyle = '#ffd700';
                 ctx.lineWidth = 2;
                 ctx.stroke();
                 ctx.save();
-                ctx.translate(175, 175);
+                ctx.translate(150, 150);
                 ctx.rotate(i * angle + angle / 2);
                 ctx.fillStyle = '#fff';
-                ctx.font = 'bold 18px Segoe UI';
+                ctx.font = 'bold 16px Segoe UI';
                 ctx.textAlign = 'right';
-                ctx.fillText(prizes[i], 155, 8);
+                ctx.fillText(prizes[i], 130, 6);
                 if (prizes[i] === '۱۰۰۰ دلار' || prizes[i] === '۰.۰۲۴ بیت‌کوین' || prizes[i] === 'شانس مجدد') {
                     ctx.shadowBlur = 10;
                     ctx.shadowColor = '#ffd700';
                 }
                 ctx.restore();
-                ctx.shadowBlur = 0; // ریست سایه
+                ctx.shadowBlur = 0;
             }
             // دایره مرکزی
             ctx.beginPath();
-            ctx.arc(175, 175, 40, 0, 2 * Math.PI);
+            ctx.arc(150, 150, 35, 0, 2 * Math.PI);
             ctx.fillStyle = '#1e1e2f';
             ctx.fill();
             ctx.strokeStyle = '#ffd700';
@@ -262,7 +262,7 @@
                 resultElement.textContent = '';
                 const spins = 5 + Math.random() * 5; // 5 تا 10 دور
                 const poochIndex = 0; // همیشه روی اولین "پوچ" فرود میاد
-                const targetAngle = spins * 2 * Math.PI + (poochIndex * angle);
+                const targetAngle = (spins * 2 * Math.PI) - (angle / 2); // تنظیم زاویه برای اولین پوچ
                 const duration = 4000; // 4 ثانیه
 
                 let startTime = null;
@@ -274,7 +274,7 @@
                         canvas.style.transform = `rotate(${currentAngle}rad)`;
                         requestAnimationFrame(animate);
                     } else {
-                        currentAngle = targetAngle;
+                        currentAngle = targetAngle % (2 * Math.PI); // تنظیم زاویه نهایی
                         canvas.style.transform = `rotate(${currentAngle}rad)`;
                         setTimeout(() => {
                             resultElement.textContent = 'متأسفانه امروز شانس همراه شما نبود. بعد از ۱۲ ساعت مجدداً شانس خودتون رو امتحان کنید!';
