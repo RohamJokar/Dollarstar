@@ -23,10 +23,10 @@
             text-align: center;
             position: relative;
             width: 100%;
-            max-width: 700px;
-            padding: 40px;
+            max-width: 600px;
+            padding: 30px;
             background: rgba(0, 0, 0, 0.8);
-            border-radius: 25px;
+            border-radius: 20px;
             box-shadow: 0 20px 60px rgba(255, 215, 0, 0.5);
             backdrop-filter: blur(15px);
             border: 2px solid rgba(255, 215, 0, 0.4);
@@ -50,11 +50,11 @@
             100% { transform: rotate(45deg) translate(-30%, -30%); }
         }
         .wheel-title {
-            font-size: 36px;
+            font-size: 32px;
             color: #ffd700;
             text-shadow: 0 0 20px rgba(255, 215, 0, 0.9);
-            margin-bottom: 30px;
-            letter-spacing: 3px;
+            margin-bottom: 25px;
+            letter-spacing: 2px;
             animation: pulseTitle 2s infinite;
         }
         @keyframes pulseTitle {
@@ -64,8 +64,8 @@
         }
         .wheel-wrapper {
             position: relative;
-            width: 450px;
-            height: 450px;
+            width: 350px;
+            height: 350px;
             margin: 0 auto;
         }
         #wheelCanvas {
@@ -73,18 +73,18 @@
             height: 100%;
             transition: transform 4s ease-out;
             border-radius: 50%;
-            box-shadow: 0 0 40px rgba(255, 215, 0, 0.6), inset 0 0 20px rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), inset 0 0 15px rgba(255, 215, 0, 0.3);
         }
         .pointer {
             position: absolute;
-            top: -30px;
+            top: -25px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 0;
-            border-left: 20px solid transparent;
-            border-right: 20px solid transparent;
-            border-top: 40px solid #ffd700;
+            border-left: 15px solid transparent;
+            border-right: 15px solid transparent;
+            border-top: 30px solid #ffd700;
             filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
             z-index: 10;
         }
@@ -92,24 +92,24 @@
             background: linear-gradient(90deg, #ffd700, #ff8c00);
             border: none;
             border-radius: 15px;
-            padding: 15px 40px;
+            padding: 12px 35px;
             color: #fff;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
-            margin-top: 30px;
+            margin-top: 20px;
         }
         .spin-btn::before {
             content: '🎰';
             position: absolute;
             top: 50%;
-            left: 15px;
+            left: 10px;
             transform: translateY(-50%);
-            font-size: 28px;
+            font-size: 24px;
             opacity: 0.3;
         }
         .spin-btn:hover {
@@ -123,8 +123,8 @@
             box-shadow: none;
         }
         .result {
-            margin-top: 20px;
-            font-size: 20px;
+            margin-top: 15px;
+            font-size: 18px;
             color: #fff;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
             opacity: 0;
@@ -133,9 +133,15 @@
         .result.show {
             opacity: 1;
         }
+        .timer {
+            margin-top: 15px;
+            font-size: 16px;
+            color: #ffd700;
+            text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+        }
         .back-link {
             display: block;
-            margin-top: 25px;
+            margin-top: 20px;
             color: #ffd700;
             text-decoration: none;
             font-size: 16px;
@@ -153,10 +159,11 @@
         <div class="wheel-title">گردونه شانس</div>
         <div class="wheel-wrapper">
             <div class="pointer"></div>
-            <canvas id="wheelCanvas" width="450" height="450"></canvas>
+            <canvas id="wheelCanvas" width="350" height="350"></canvas>
         </div>
         <button class="spin-btn" id="spinBtn">چرخاندن</button>
         <div class="result" id="result"></div>
+        <div class="timer" id="timer"></div>
         <a href="welcome.html" class="back-link">بازگشت به صفحه اصلی</a>
     </div>
 
@@ -165,10 +172,14 @@
         const ctx = canvas.getContext('2d');
         const spinBtn = document.getElementById('spinBtn');
         const resultElement = document.getElementById('result');
+        const timerElement = document.getElementById('timer');
         const prizes = [
             'پوچ', 'پوچ', '۱۰۰۰ دلار', 'پوچ', '۰.۰۲۴ بیت‌کوین', 'پوچ', 'شانس مجدد', 'پوچ'
         ];
-        const colors = ['#ff6b6b', '#4ecdc4', '#ffd700', '#45b7d1', '#96c93d', '#f7d794', '#ff9f1c', '#d4a5a5'];
+        const colors = [
+            '#ff6b6b', '#4ecdc4', 'linear-gradient(90deg, #ffd700, #ff8c00)', '#45b7d1', 
+            'linear-gradient(90deg, #ffd700, #ff8c00)', '#f7d794', 'linear-gradient(90deg, #ffd700, #ff8c00)', '#d4a5a5'
+        ];
         const segments = prizes.length;
         const angle = (2 * Math.PI) / segments;
         let currentAngle = 0;
@@ -179,49 +190,76 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < segments; i++) {
                 ctx.beginPath();
-                ctx.fillStyle = colors[i];
-                ctx.moveTo(225, 225); // مرکز گردونه
-                ctx.arc(225, 225, 225, i * angle, (i + 1) * angle);
-                ctx.lineTo(225, 225);
+                if (colors[i].startsWith('linear-gradient')) {
+                    const gradient = ctx.createLinearGradient(175, 175, 275, 275);
+                    gradient.addColorStop(0, '#ffd700');
+                    gradient.addColorStop(1, '#ff8c00');
+                    ctx.fillStyle = gradient;
+                } else {
+                    ctx.fillStyle = colors[i];
+                }
+                ctx.moveTo(175, 175); // مرکز گردونه
+                ctx.arc(175, 175, 175, i * angle, (i + 1) * angle);
+                ctx.lineTo(175, 175);
                 ctx.fill();
                 ctx.strokeStyle = '#ffd700';
                 ctx.lineWidth = 2;
                 ctx.stroke();
                 ctx.save();
-                ctx.translate(225, 225);
+                ctx.translate(175, 175);
                 ctx.rotate(i * angle + angle / 2);
                 ctx.fillStyle = '#fff';
-                ctx.font = 'bold 20px Segoe UI';
+                ctx.font = 'bold 18px Segoe UI';
                 ctx.textAlign = 'right';
-                ctx.fillText(prizes[i], 200, 10);
+                ctx.fillText(prizes[i], 155, 8);
+                if (prizes[i] === '۱۰۰۰ دلار' || prizes[i] === '۰.۰۲۴ بیت‌کوین' || prizes[i] === 'شانس مجدد') {
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#ffd700';
+                }
                 ctx.restore();
+                ctx.shadowBlur = 0; // ریست سایه
             }
-            // اضافه کردن دایره مرکزی برای زیبایی
+            // دایره مرکزی
             ctx.beginPath();
-            ctx.arc(225, 225, 50, 0, 2 * Math.PI);
+            ctx.arc(175, 175, 40, 0, 2 * Math.PI);
             ctx.fillStyle = '#1e1e2f';
             ctx.fill();
             ctx.strokeStyle = '#ffd700';
-            ctx.lineWidth = 4;
+            ctx.lineWidth = 3;
             ctx.stroke();
         }
         drawWheel();
 
+        // تایمر
+        function updateTimer() {
+            const now = Date.now();
+            const lastSpinTime = localStorage.getItem('lastSpinTime') ? parseInt(localStorage.getItem('lastSpinTime')) : 0;
+            const timeLeft = cooldown - (now - lastSpinTime);
+            if (timeLeft > 0) {
+                const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                timerElement.textContent = `شانس بعدی: ${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                spinBtn.disabled = true;
+            } else {
+                timerElement.textContent = 'آماده برای چرخاندن!';
+                spinBtn.disabled = false;
+            }
+        }
+        setInterval(updateTimer, 1000);
+        updateTimer();
+
         // چک کردن زمان آخرین چرخش
-        let lastSpinTime = localStorage.getItem('lastSpinTime') ? parseInt(localStorage.getItem('lastSpinTime')) : 0;
         const now = Date.now();
+        let lastSpinTime = localStorage.getItem('lastSpinTime') ? parseInt(localStorage.getItem('lastSpinTime')) : 0;
         if (now - lastSpinTime < cooldown) {
             spinBtn.disabled = true;
-            const remainingTime = cooldown - (now - lastSpinTime);
-            const hoursLeft = Math.ceil(remainingTime / (1000 * 60 * 60));
-            resultElement.textContent = `لطفاً ${hoursLeft} ساعت دیگر برای شانس بعدی صبر کنید!`;
-            resultElement.classList.add('show');
         }
 
         spinBtn.addEventListener('click', () => {
             if (!spinBtn.disabled) {
                 spinBtn.disabled = true;
-                resultElement.textContent = ''; // پاک کردن پیام قبلی
+                resultElement.textContent = '';
                 const spins = 5 + Math.random() * 5; // 5 تا 10 دور
                 const poochIndex = 0; // همیشه روی اولین "پوچ" فرود میاد
                 const targetAngle = spins * 2 * Math.PI + (poochIndex * angle);
@@ -242,7 +280,7 @@
                             resultElement.textContent = 'متأسفانه امروز شانس همراه شما نبود. بعد از ۱۲ ساعت مجدداً شانس خودتون رو امتحان کنید!';
                             resultElement.classList.add('show');
                             localStorage.setItem('lastSpinTime', Date.now());
-                        }, 500); // تأخیر 0.5 ثانیه برای نمایش پیام
+                        }, 500);
                     }
                 }
                 requestAnimationFrame(animate);
