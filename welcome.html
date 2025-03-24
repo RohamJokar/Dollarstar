@@ -267,7 +267,7 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-        .miner-link, .wheel-link {
+        .miner-link, .wheel-link, .loan-link {
             width: 80%;
             max-width: 1200px;
             background: linear-gradient(90deg, #ffd700, #ff8c00);
@@ -285,7 +285,7 @@
             margin-bottom: 20px;
             animation: minerPulse 2s infinite;
         }
-        .miner-link::before, .wheel-link::before {
+        .miner-link::before, .wheel-link::before, .loan-link::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -297,7 +297,7 @@
             animation: minerShine 4s infinite;
             pointer-events: none;
         }
-        .miner-link:hover, .wheel-link:hover {
+        .miner-link:hover, .wheel-link:hover, .loan-link:hover {
             transform: scale(1.02);
             box-shadow: 0 15px 50px rgba(255, 215, 0, 0.7);
             background: linear-gradient(90deg, #ff8c00, #ffd700);
@@ -391,10 +391,9 @@
             </div>
         </div>
     </div>
-
     <a href="miner.html" class="miner-link">ماینر ارز دیجیتال</a>
     <a href="wheel.html" class="wheel-link">گردونه شانس</a>
-
+    <a href="loan.html" class="loan-link">درخواست وام فوری</a>
     <div class="link-container">
         <a href="#" class="link-box">گزینه ۱</a>
         <a href="#" class="link-box">گزینه ۲</a>
@@ -417,12 +416,10 @@
         <a href="#" class="link-box">گزینه ۱۹</a>
         <a href="#" class="link-box">گزینه ۲۰</a>
     </div>
-
     <div class="income-section">
         <div class="income-text">درآمد شما تا به این لحظه: 0.00 دلار</div>
         <div class="income-subtext">به تومان: 0 تومان</div>
     </div>
-
     <div class="menu">
         <button class="menu-btn">منو</button>
         <div class="dropdown">
@@ -433,9 +430,7 @@
             <a href="#">ثبت انتقاد</a>
         </div>
     </div>
-
     <div class="notification" id="notification"></div>
-
     <script>
         function updateClock() {
             const options = { timeZone: 'Asia/Tehran', hour12: false };
@@ -445,23 +440,21 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // نوتیفیکیشن فیک
         const notifications = [
             'علیرضا مبلغ ۲۹ دلار برداشت زد - ۴ دقیقه پیش',
             'حسین مبلغ ۱۳ دلار برداشت زد - ۱۸ دقیقه پیش',
             'محمدرضا مبلغ ۷۳ دلار برداشت زد - ۴۲ دقیقه پیش'
         ];
         const notificationElement = document.getElementById('notification');
-
         function showNotification() {
             const randomNotification = notifications[Math.floor(Math.random() * notifications.length)];
             notificationElement.textContent = randomNotification;
             notificationElement.classList.add('show');
             setTimeout(() => {
                 notificationElement.classList.remove('show');
-            }, 5000); // ۵ ثانیه نمایش
+            }, 5000);
         }
-        setInterval(showNotification, 180 * 1000); // هر ۳ دقیقه
+        setInterval(showNotification, 180 * 1000);
         showNotification();
     </script>
 </body>
