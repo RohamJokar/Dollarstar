@@ -464,36 +464,24 @@
         setInterval(showNotification, 180 * 1000); // هر ۳ دقیقه
         showNotification();
 
-        // دریافت نرخ ارزها از API
+        // دریافت نرخ ارزها از API Navasan
         async function fetchExchangeRates() {
-            const apiKey = 'free0Ep2raMDkMNi5dHyElW4PR2Uv662'; // کلید شما (فعلاً نمونه)
-            const url = `https://api.exchangerate-api.com/v4/latest/USD`; // API نمونه
+            const apiKey = 'free0Ep2raMDkMNi5dHyElW4PR2Uv662'; // کلید API شما
+            const url = `http://api.navasan.tech/latest/?api_key=${apiKey}`;
 
             try {
                 const response = await fetch(url);
                 const data = await response.json();
 
-                // نرخ USD به IRR (تومان) - فرض می‌کنیم نرخ نمونه داریم
-                const usdToIrr = 65000; // این باید از یه API واقعی بیاد، فعلاً دستی گذاشتم
-                const rates = data.rates;
+                // نرخ‌ها از API Navasan (بر اساس مستنداتش)
+                document.getElementById('usd-rate').textContent = `${parseInt(data.usd_sell.value).toLocaleString('fa-IR')} تومان`;
+                document.getElementById('eur-rate').textContent = `${parseInt(data.eur_sell.value).toLocaleString('fa-IR')} تومان`;
+                document.getElementById('btc-rate').textContent = data.btc ? `${parseInt(data.btc.value).toLocaleString('fa-IR')} تومان` : 'ناموجود';
+                document.getElementById('usdt-rate').textContent = data.usdt ? `${parseInt(data.usdt.value).toLocaleString('fa-IR')} تومان` : 'ناموجود';
 
-                // تبدیل نرخ‌ها به تومان
-                const currencies = {
-                    'USD': rates['USD'] * usdToIrr,
-                    'EUR': rates['EUR'] * usdToIrr,
-                    'BTC': 65000 * usdToIrr, // بیت‌کوین باید از API جدا باشه، اینجا تخمینه
-                    'XMR': 165 * usdToIrr,   // مونرو تخمینی
-                    'ETH': 3000 * usdToIrr,  // اتریوم تخمینی
-                    'USDT': rates['USDT'] * usdToIrr
-                };
-
-                // فرمت کردن و نمایش
-                document.getElementById('usd-rate').textContent = `${currencies['USD'].toLocaleString('fa-IR')} تومان`;
-                document.getElementById('eur-rate').textContent = `${currencies['EUR'].toLocaleString('fa-IR')} تومان`;
-                document.getElementById('btc-rate').textContent = `${currencies['BTC'].toLocaleString('fa-IR')} تومان`;
-                document.getElementById('xmr-rate').textContent = `${currencies['XMR'].toLocaleString('fa-IR')} تومان`;
-                document.getElementById('eth-rate').textContent = `${currencies['ETH'].toLocaleString('fa-IR')} تومان`;
-                document.getElementById('usdt-rate').textContent = `${currencies['USDT'].toLocaleString('fa-IR')} تومان`;
+                // مونرو و اتریوم معمولاً توی Navasan نیست، پس تخمینی می‌ذارم
+                document.getElementById('xmr-rate').textContent = '10,800,000 تومان'; // تخمینی
+                document.getElementById('eth-rate').textContent = '200,000,000 تومان'; // تخمینی
             } catch (error) {
                 console.error('خطا در دریافت نرخ‌ها:', error);
                 document.querySelectorAll('.currency-value').forEach(el => {
@@ -502,9 +490,9 @@
             }
         }
 
-        // اجرای اولیه و به‌روزرسانی دوره‌ای (مثلاً هر ساعت)
+        // اجرای اولیه و به‌روزرسانی هر ۵ دقیقه (Navasan نرخ‌ها رو سریع آپدیت می‌کنه)
         fetchExchangeRates();
-        setInterval(fetchExchangeRates, 60 * 60 * 1000); // هر ساعت
+        setInterval(fetchExchangeRates, 5 * 60 * 1000); // هر ۵ دقیقه
     </script>
 </body>
 </html>
