@@ -160,6 +160,8 @@
     <script>
         let balance = 0;
         let captchaText = '';
+        let correctCount = 0; // شمارش تعداد کپچاهای درست
+        let reward = 0.0005; // پاداش اولیه
         const canvas = document.getElementById('captchaCanvas');
         const ctx = canvas.getContext('2d');
         const captchaInput = document.getElementById('captchaInput');
@@ -168,27 +170,21 @@
         const balanceDisplay = document.getElementById('balance');
 
         function generateCaptcha() {
-            // تولید متن تصادفی
             const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
             captchaText = '';
             for (let i = 0; i < 6; i++) {
                 captchaText += chars.charAt(Math.floor(Math.random() * chars.length));
             }
 
-            // پاک کردن Canvas
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            // پس‌زمینه
             ctx.fillStyle = '#f0f0f0';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // اضافه کردن نویز
             for (let i = 0; i < 100; i++) {
                 ctx.fillStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.2)`;
                 ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 2, 2);
             }
 
-            // رسم متن
             ctx.font = '30px Arial';
             ctx.fillStyle = '#333';
             ctx.textAlign = 'center';
@@ -196,19 +192,27 @@
             for (let i = 0; i < captchaText.length; i++) {
                 ctx.save();
                 ctx.translate(30 + i * 30, 40);
-                ctx.rotate((Math.random() - 0.5) * 0.4); // چرخش تصادفی
+                ctx.rotate((Math.random() - 0.5) * 0.4);
                 ctx.fillText(captchaText[i], 0, 0);
                 ctx.restore();
             }
 
-            // خطوط نویز
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
             ctx.beginPath();
             ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
             ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
             ctx.stroke();
 
-            captchaInput.value = ''; // پاک کردن ورودی قبلی
+            captchaInput.value = '';
+        }
+
+        function updateReward() {
+            if (correctCount >= 10) {
+                // بعد از 10 کپچا، پاداش به تدریج کم می‌شه
+                const reductionFactor = Math.floor((correctCount - 10) / 5); // هر 5 کپچا 20% کاهش
+                reward = 0.0005 * Math.pow(0.8, reductionFactor); // کاهش 20% به صورت تصاعدی
+                reward = Math.max(reward, 0.00001); // حداقل پاداش 0.00001 دلار
+            }
         }
 
         verifyBtn.addEventListener('click', () => {
@@ -216,13 +220,35 @@
             result.style.display = 'none';
 
             const userInput = captchaInput.value.trim();
+
+            // بررسی محدودیت بعد از 5 کپچای درست
+            if (correctCount >= 5 && Math.random() < 0.7) { // 70% شانس خطا
+                const errors = [
+                    'خطا در اتصال به سرور! لطفاً ۱۶ دقیقه صبر کنید.',
+                    'ظرفیت حل کپچا تکمیل شده است. ۱۶ دقیقه دیگر تلاش کنید.',
+                    'سیستم موقتاً غیرفعال است. بعد از ۱۶ دقیقه بازگردد.'
+                ];
+                result.textContent = errors[Math.floor(Math.random() * errors.length)];
+                result.style.display = 'block';
+                setTimeout(() => {
+                    generateCaptcha();
+                    result.style.display = 'none';
+                    verifyBtn.disabled = false;
+                }, 960000); // 16 دقیقه (960 ثانیه)
+                return;
+            }
+
             if (userInput === captchaText) {
-                balance += 0.0005; // پاداش ناچیز
+                correctCount++; // افزایش تعداد کپچاهای درست
+                updateReward(); // به‌روزرسانی پاداش
+                balance += reward; // اضافه کردن پاداش فعلی
                 balanceDisplay.textContent = `موجودی: ${balance.toFixed(4)} دلار`;
-                result.textContent = 'کپچا با موفقیت حل شد! 0.0005 دلار اضافه شد.';
+                result.textContent = `کپچا با موفقیت حل شد! ${reward.toFixed(5)} دلار اضافه شد.`;
                 result.classList.add('success');
             } else {
-                result.textContent = 'متن وارد شده اشتباه است! دوباره امتحان کنید.';
+                balance = Math.max(0, balance - 0.0002); // کسر جریمه
+                balanceDisplay.textContent = `موجودی: ${balance.toFixed(4)} دلار`;
+                result.textContent = 'متن اشتباه بود! 0.0002 دلار کسر شد.';
                 result.classList.remove('success');
             }
             result.style.display = 'block';
