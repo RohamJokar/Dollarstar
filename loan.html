@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>درخواست وام فوری</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a3a, #ff8c00, #ffd700);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        .loan-container {
+            position: relative;
+            width: 600px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 50px rgba(255, 140, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            text-align: center;
+            margin-top: 50px;
+            overflow: hidden;
+        }
+        .loan-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255, 215, 0, 0.2), rgba(255, 140, 0, 0.1));
+            transform: rotate(45deg);
+            animation: shine 5s infinite;
+            pointer-events: none;
+        }
+        @keyframes shine {
+            0% { transform: rotate(45deg) translate(-30%, -30%); }
+            50% { transform: rotate(45deg) translate(30%, 30%); }
+            100% { transform: rotate(45deg) translate(-30%, -30%); }
+        }
+        h1 {
+            color: #fff;
+            font-size: 40px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .amount-options, .type-options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .option {
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+            padding: 20px;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 120px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(255, 140, 0, 0.5);
+            transition: all 0.3s ease;
+        }
+        .option:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 30px rgba(255, 140, 0, 0.7);
+        }
+        .option.selected {
+            background: linear-gradient(90deg, #ff8c00, #ffd700);
+            transform: scale(1.05);
+        }
+        .input-box {
+            display: none;
+            margin: 20px auto;
+            width: 80%;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.3);
+            animation: slideIn 0.5s ease;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .input-box p {
+            color: #fff;
+            font-size: 16px;
+            margin-bottom: 10px;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.5);
+        }
+        .input-box input {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .submit-btn {
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            padding: 20px 40px;
+            border: none;
+            border-radius: 15px;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0, 210, 255, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            animation: pulse 2s infinite;
+        }
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
+            transform: rotate(45deg);
+            animation: btnShine 4s infinite;
+            pointer-events: none;
+        }
+        .submit-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 210, 255, 0.7);
+            background: linear-gradient(90deg, #3a7bd5, #00d2ff);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+        @keyframes btnShine {
+            0% { transform: rotate(45deg) translate(-30%, -30%); }
+            50% { transform: rotate(45deg) translate(30%, 30%); }
+            100% { transform: rotate(45deg) translate(-30%, -30%); }
+        }
+        .message {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(255, 140, 0, 0.2));
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            text-shadow: 0 0 10px rgba(255, 140, 0, 0.5);
+            animation: slideDown 0.5s ease forwards;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateX(-50%) translateY(-100px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loan-container">
+        <h1>درخواست وام فوری</h1>
+        <div class="amount-options">
+            <div class="option" data-amount="10000000">۱۰ میلیون</div>
+            <div class="option" data-amount="15000000">۱۵ میلیون</div>
+            <div class="option" data-amount="20000000">۲۰ میلیون</div>
+            <div class="option" data-amount="25000000">۲۵ میلیون</div>
+        </div>
+        <div class="type-options">
+            <div class="option" data-type="toman">تومان</div>
+            <div class="option" data-type="dollar">دلار</div>
+        </div>
+        <div class="input-box" id="input-box">
+            <p id="input-message"></p>
+            <input type="text" id="input-field" placeholder="اینجا وارد کنید">
+        </div>
+        <button class="submit-btn" id="submit-btn">ارسال درخواست</button>
+    </div>
+    <div class="message" id="message">در حال حاضر کاربر گرامی شما واجد شرایط دریافت وام نیستید، لطفاً مدتی بعد امتحان کنید</div>
+
+    <script>
+        const amountOptions = document.querySelectorAll('.amount-options .option');
+        const typeOptions = document.querySelectorAll('.type-options .option');
+        const inputBox = document.getElementById('input-box');
+        const inputMessage = document.getElementById('input-message');
+        const submitBtn = document.getElementById('submit-btn');
+        const message = document.getElementById('message');
+
+        amountOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                amountOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+            });
+        });
+
+        typeOptions.forEach(option => {
+            option.addEventListener('click', () => {
+                typeOptions.forEach(opt => opt.classList.remove('selected'));
+                option.classList.add('selected');
+                inputBox.style.display = 'block';
+                if (option.dataset.type === 'toman') {
+                    inputMessage.textContent = 'شماره کارت خود را وارد کنید';
+                } else if (option.dataset.type === 'dollar') {
+                    inputMessage.textContent = 'لطفاً لینک پی‌پال خود را وارد کنید';
+                }
+            });
+        });
+
+        submitBtn.addEventListener('click', () => {
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000); // پیام بعد از ۵ ثانیه محو میشه
+        });
+    </script>
+</body>
+</html>
