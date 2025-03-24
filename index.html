@@ -10,7 +10,6 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, sans-serif;
         }
-
         body {
             display: flex;
             justify-content: center;
@@ -18,7 +17,6 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
         }
-
         .login-box {
             position: relative;
             width: 400px;
@@ -30,64 +28,32 @@
             border: 1px solid rgba(255, 255, 255, 0.18);
             overflow: hidden;
         }
-
-        .login-box::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
-            transform: rotate(30deg);
-            pointer-events: none;
-            animation: glow 6s infinite;
-        }
-
-        @keyframes glow {
-            0% { transform: rotate(30deg) translate(-20%, -20%); }
-            50% { transform: rotate(30deg) translate(20%, 20%); }
-            100% { transform: rotate(30deg) translate(-20%, -20%); }
-        }
-
         h2 {
             color: #fff;
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            margin-bottom: 20px;
+            font-size: 24px;
         }
-
         label {
             color: #e0e0e0;
             font-size: 14px;
             display: block;
             margin-bottom: 5px;
         }
-
         input {
             width: 100%;
             padding: 12px;
-            margin-bottom: 20px;
+            margin-bottom: 10px;
             border: none;
             border-radius: 25px;
             background: rgba(255, 255, 255, 0.2);
             color: #fff;
             font-size: 16px;
             outline: none;
-            transition: all 0.3s ease;
         }
-
-        input:focus {
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
-        }
-
         input::placeholder {
             color: #b0b0b0;
         }
-
         button {
             width: 100%;
             padding: 12px;
@@ -100,55 +66,143 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-
-        button:hover {
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+        button:hover:enabled {
             background: linear-gradient(90deg, #3a7bd5, #00d2ff);
             box-shadow: 0 0 15px rgba(0, 210, 255, 0.7);
-            transform: translateY(-2px);
         }
-
         #message {
-            margin-top: 20px;
+            margin-top: 10px;
             font-size: 14px;
             text-align: center;
             font-weight: bold;
+            color: #ff4444;
+        }
+        /* پاپ‌آپ */
+        .popup, .overlay {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 500px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+        }
+        .overlay {
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            top: 0;
+            left: 0;
+            z-index: 999;
+        }
+        .popup-content {
+            max-height: 300px;
+            overflow-y: auto;
+            text-align: justify;
+        }
+        .popup button {
+            margin-top: 10px;
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .popup button:hover {
+            background: #218838;
         }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <h2>ورود</h2>
-        <form id="loginForm">
-            <label>نام کاربری</label>
-            <input type="text" id="username" placeholder="نام کاربری رو وارد کن" required>
-            <label>رمز عبور</label>
-            <input type="password" id="password" placeholder="رمز عبور رو وارد کن" required>
-            <button type="submit">ورود</button>
-        </form>
-        <p id="message"></p>
+
+<div class="login-box">
+    <h2>ورود</h2>
+    <form id="loginForm">
+        <label>نام کاربری</label>
+        <input type="text" id="username" placeholder="نام کاربری را وارد کنید" required>
+        <label>رمز عبور</label>
+        <input type="password" id="password" placeholder="رمز عبور را وارد کنید" required>
+
+        <label>
+            <input type="checkbox" id="agreeCheckbox"> با شرایط و قوانین موافقم
+        </label>
+        
+        <button type="submit" id="loginButton" disabled>ورود</button>
+    </form>
+    <p id="message"></p>
+</div>
+
+<!-- پاپ‌آپ قوانین -->
+<div class="overlay" id="overlay"></div>
+<div class="popup" id="popup">
+    <h3>شرایط و قوانین</h3>
+    <div class="popup-content">
+        <p>
+            لطفاً شرایط و قوانین سایت را به‌طور کامل مطالعه کنید. شما با پذیرش این قوانین مسئولیت اقدامات خود را می‌پذیرید.
+            <br>1. حفظ امنیت حساب کاربری بر عهده شما است.
+            <br>2. استفاده از اطلاعات کاربران دیگر بدون اجازه ممنوع است.
+            <br>3. هرگونه فعالیت غیرقانونی در سایت پیگرد قانونی خواهد داشت.
+        </p>
     </div>
+    <button onclick="closePopup()">متوجه شدم</button>
+</div>
 
-    <script>
-        const loginForm = document.getElementById('loginForm');
-        const message = document.getElementById('message');
+<script>
+    const loginForm = document.getElementById('loginForm');
+    const loginButton = document.getElementById('loginButton');
+    const agreeCheckbox = document.getElementById('agreeCheckbox');
+    const message = document.getElementById('message');
 
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
+    // بررسی وضعیت چک‌باکس و نمایش پاپ‌آپ
+    agreeCheckbox.addEventListener('change', function() {
+        if (this.checked) {
+            openPopup();
+            loginButton.disabled = false;
+        } else {
+            loginButton.disabled = true;
+        }
+    });
 
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
+    // نمایش پاپ‌آپ
+    function openPopup() {
+        document.getElementById('popup').style.display = "block";
+        document.getElementById('overlay').style.display = "block";
+    }
 
-            if (username === 'User72' && password === 'dollar') {
-                message.style.color = '#00ff00';
-                message.textContent = 'ورود موفق! در حال انتقال...';
-                setTimeout(() => {
-                    window.location.href = 'welcome.html'; // انتقال به صفحه خوش‌آمد
-                }, 1000); // 1 ثانیه صبر قبل از انتقال
-            } else {
-                message.style.color = '#ff4444';
-                message.textContent = 'خطا: نام کاربری یا رمز عبور اشتباهه!';
-            }
-        });
-    </script>
+    // بستن پاپ‌آپ
+    function closePopup() {
+        document.getElementById('popup').style.display = "none";
+        document.getElementById('overlay').style.display = "none";
+    }
+
+    // بررسی ورود کاربر
+    loginForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+
+        if (username === 'User72' && password === 'dollar') {
+            message.style.color = '#00ff00';
+            message.textContent = 'ورود موفق! در حال انتقال...';
+            setTimeout(() => {
+                window.location.href = 'welcome.html';
+            }, 1000);
+        } else {
+            message.style.color = '#ff4444';
+            message.textContent = 'خطا: نام کاربری یا رمز عبور اشتباه است!';
+        }
+    });
+</script>
+
 </body>
-</html>
+    </html>
