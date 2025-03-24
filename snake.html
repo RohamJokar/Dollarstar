@@ -124,7 +124,7 @@
 <body>
     <div class="game-container">
         <h1>بازی دلاری - Snake</h1>
-        <div class="goal">هدف امروز: ۹۰ دلار</div>
+        <div class="goal">هدف امروز: ۹۰ دلار (نیاز به ۷۰ امتیاز)</div>
         <canvas id="gameCanvas" width="600" height="400"></canvas>
         <div class="overlay"></div>
         <div class="controller">
@@ -164,7 +164,7 @@
             snake.unshift(head);
 
             if (head.x === food.x && head.y === food.y) {
-                score += 1;
+                score += 3; // هر غذا ۳ امتیاز
                 generateFood();
             } else {
                 snake.pop();
@@ -221,7 +221,6 @@
             }
         }
 
-        // کنترل با دکمه‌ها
         const upBtn = document.getElementById('upBtn');
         const downBtn = document.getElementById('downBtn');
         const leftBtn = document.getElementById('leftBtn');
@@ -240,7 +239,6 @@
             if (dx === 0) { dx = 1; dy = 0; }
         });
 
-        // همچنان کنترل با کیبورد هم فعال باشه
         document.addEventListener('keydown', e => {
             switch (e.key) {
                 case 'ArrowUp': if (dy === 0) { dx = 0; dy = -1; } break;
