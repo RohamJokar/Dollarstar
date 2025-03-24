@@ -62,28 +62,30 @@
         .instruction {
             color: #e0e0e0;
             font-size: 18px;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
-        .captcha-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-bottom: 30px;
+        canvas {
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.9);
         }
-        .captcha-item {
-            width: 100px;
-            height: 100px;
+        .captcha-input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
             background: rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 5px 15px rgba(0, 255, 210, 0.2);
+            margin-bottom: 20px;
+            text-align: center;
         }
-        .captcha-item:hover {
+        .captcha-input:focus {
             background: rgba(255, 255, 255, 0.3);
-        }
-        .captcha-item.selected {
-            border: 3px solid #00d2ff;
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.7);
+            box-shadow: 0 5px 20px rgba(0, 255, 210, 0.5);
         }
         .verify-btn {
             width: 100%;
@@ -147,8 +149,9 @@
     <div class="captcha-container">
         <h1>حل کپچا و درآمد دلاری</h1>
         <div class="balance" id="balance">موجودی: 0.0000 دلار</div>
-        <p class="instruction">تصاویر مربع را انتخاب کنید</p>
-        <div class="captcha-grid" id="captchaGrid"></div>
+        <p class="instruction">متن داخل تصویر را تایپ کنید</p>
+        <canvas id="captchaCanvas" width="200" height="80"></canvas>
+        <input type="text" class="captcha-input" id="captchaInput" placeholder="متن را وارد کنید">
         <button class="verify-btn" id="verifyBtn">تأیید</button>
         <div class="result" id="result"></div>
         <p class="min-withdrawal">حداقل برداشت: 25 دلار</p>
@@ -156,52 +159,70 @@
 
     <script>
         let balance = 0;
-        const correctItems = [1, 4, 7]; // شماره‌های تصادفی برای مربع‌ها (0 تا 8)
-        const captchaGrid = document.getElementById('captchaGrid');
+        let captchaText = '';
+        const canvas = document.getElementById('captchaCanvas');
+        const ctx = canvas.getContext('2d');
+        const captchaInput = document.getElementById('captchaInput');
         const verifyBtn = document.getElementById('verifyBtn');
         const result = document.getElementById('result');
         const balanceDisplay = document.getElementById('balance');
-        let selectedItems = [];
 
         function generateCaptcha() {
-            captchaGrid.innerHTML = '';
-            selectedItems = [];
-            for (let i = 0; i < 9; i++) {
-                const item = document.createElement('div');
-                item.classList.add('captcha-item');
-                item.dataset.index = i;
-                if (correctItems.includes(i)) {
-                    item.style.background = 'rgba(0, 255, 210, 0.3)'; // مربع‌ها با رنگ خاص
-                } else {
-                    item.style.background = 'rgba(255, 215, 0, 0.3)'; // دایره‌ها با رنگ دیگه
-                }
-                item.addEventListener('click', () => {
-                    if (selectedItems.includes(i)) {
-                        selectedItems = selectedItems.filter(idx => idx !== i);
-                        item.classList.remove('selected');
-                    } else {
-                        selectedItems.push(i);
-                        item.classList.add('selected');
-                    }
-                });
-                captchaGrid.appendChild(item);
+            // تولید متن تصادفی
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            captchaText = '';
+            for (let i = 0; i < 6; i++) {
+                captchaText += chars.charAt(Math.floor(Math.random() * chars.length));
             }
+
+            // پاک کردن Canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // پس‌زمینه
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // اضافه کردن نویز
+            for (let i = 0; i < 100; i++) {
+                ctx.fillStyle = `rgba(${Math.random() * 255}, ${Math.random() * 255}, ${Math.random() * 255}, 0.2)`;
+                ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 2, 2);
+            }
+
+            // رسم متن
+            ctx.font = '30px Arial';
+            ctx.fillStyle = '#333';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            for (let i = 0; i < captchaText.length; i++) {
+                ctx.save();
+                ctx.translate(30 + i * 30, 40);
+                ctx.rotate((Math.random() - 0.5) * 0.4); // چرخش تصادفی
+                ctx.fillText(captchaText[i], 0, 0);
+                ctx.restore();
+            }
+
+            // خطوط نویز
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.3)';
+            ctx.beginPath();
+            ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+            ctx.stroke();
+
+            captchaInput.value = ''; // پاک کردن ورودی قبلی
         }
 
         verifyBtn.addEventListener('click', () => {
             verifyBtn.disabled = true;
             result.style.display = 'none';
 
-            const isCorrect = selectedItems.length === correctItems.length &&
-                selectedItems.every(idx => correctItems.includes(idx));
-
-            if (isCorrect) {
+            const userInput = captchaInput.value.trim();
+            if (userInput === captchaText) {
                 balance += 0.0005; // پاداش ناچیز
                 balanceDisplay.textContent = `موجودی: ${balance.toFixed(4)} دلار`;
                 result.textContent = 'کپچا با موفقیت حل شد! 0.0005 دلار اضافه شد.';
                 result.classList.add('success');
             } else {
-                result.textContent = 'کپچا اشتباه بود! دوباره امتحان کنید.';
+                result.textContent = 'متن وارد شده اشتباه است! دوباره امتحان کنید.';
                 result.classList.remove('success');
             }
             result.style.display = 'block';
