@@ -17,7 +17,6 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #1e1e2f, #3a3a5a, #2a2a4a);
             position: relative;
-            flex-direction: column;
         }
         .welcome-box {
             position: relative;
@@ -131,40 +130,69 @@
             padding-left: 25px;
         }
 
-        /* موزیک پلیر */
+        /* استایل موزیک پلیر */
         .music-player {
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 20px;
             margin-top: 30px;
-            width: 320px;
-            text-align: center;
-            box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
-            color: #fff;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 255, 210, 0.3);
         }
-
-        .music-player audio {
-            width: 100%;
-            border-radius: 10px;
-            outline: none;
-        }
-
-        .music-player button {
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+        .track-info {
             color: #fff;
-            border: none;
-            border-radius: 20px;
-            padding: 10px 20px;
-            cursor: pointer;
             font-size: 16px;
-            font-weight: bold;
-            margin-top: 15px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 5px rgba(0, 255, 210, 0.5);
+        }
+        .progress-bar {
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .progress {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            transition: width 0.1s linear;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .control-btn {
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: #fff;
+            font-size: 18px;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
-
-        .music-player button:hover {
-            background: linear-gradient(90deg, #3a7bd5, #00d2ff);
+        .control-btn:hover {
+            transform: scale(1.1);
             box-shadow: 0 0 15px rgba(0, 210, 255, 0.7);
+        }
+        .track-list {
+            margin-top: 15px;
+            max-height: 100px;
+            overflow-y: auto;
+        }
+        .track-list div {
+            padding: 10px;
+            color: #e0e0e0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .track-list div:hover, .track-list div.active {
+            background: rgba(0, 210, 255, 0.2);
+            color: #fff;
         }
     </style>
 </head>
@@ -172,28 +200,38 @@
     <div class="welcome-box">
         <h1>خوش اومدی، User72!</h1>
         <p>ورودت موفقیت‌آمیز بود. اینجا صفحه اختصاصی توئه!</p>
+        <!-- نمایش ساعت آنلاین -->
         <div id="clock" class="clock"></div>
+
+        <!-- موزیک پلیر -->
+        <div class="music-player">
+            <div class="track-info" id="track-info">در حال پخش: ---</div>
+            <div class="progress-bar" id="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="controls">
+                <button class="control-btn" id="prev">⏮</button>
+                <button class="control-btn" id="play">▶</button>
+                <button class="control-btn" id="next">⏭</button>
+            </div>
+            <div class="track-list" id="track-list">
+                <div data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">آهنگ 1</div>
+                <div data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">آهنگ 2</div>
+                <div data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">آهنگ 3</div>
+            </div>
+        </div>
     </div>
 
     <!-- منوی کشویی -->
     <div class="menu">
         <button class="menu-btn">منو</button>
         <div class="dropdown">
-            <a href="message.html">پیام به مدیریت</a> <!-- لینک به صفحه message.html -->
-            <a href="paypal.html">پیگیری پی‌پال</a> <!-- لینک به صفحه پی‌پال -->
+            <a href="message.html">پیام به مدیریت</a>
+            <a href="paypal.html">پیگیری پی‌پال</a>
             <a href="#">پیگیری سرور مجازی</a>
             <a href="#">پیگیری تبدیل دلار به ریال</a>
             <a href="#">ثبت انتقاد</a>
         </div>
-    </div>
-
-    <!-- موزیک پلیر -->
-    <div class="music-player">
-        <audio id="music-player" controls>
-            <source src="https://irsv.upmusics.com/AliBZ/Marconi%20Union%20-%20Weightless%20(320).mp3" type="audio/mp3">
-            مرورگر شما از پخش صوت پشتیبانی نمی‌کند.
-        </audio>
-        <button onclick="document.getElementById('music-player').play()">پخش موسیقی</button>
     </div>
 
     <script>
@@ -203,12 +241,82 @@
             const time = new Date().toLocaleString('fa-IR', options);
             document.getElementById('clock').textContent = time;
         }
-
-        // به‌روزرسانی ساعت هر ثانیه
         setInterval(updateClock, 1000);
-
-        // فراخوانی تابع برای نمایش ساعت هنگام بارگذاری صفحه
         updateClock();
+
+        // اسکریپت موزیک پلیر
+        const audio = new Audio();
+        const playBtn = document.getElementById('play');
+        const prevBtn = document.getElementById('prev');
+        const nextBtn = document.getElementById('next');
+        const progress = document.getElementById('progress');
+        const progressBar = document.getElementById('progress-bar');
+        const trackInfo = document.getElementById('track-info');
+        const trackList = document.getElementById('track-list').children;
+        let currentTrack = 0;
+
+        // تنظیم آهنگ‌ها
+        const tracks = Array.from(trackList);
+        tracks.forEach((track, index) => {
+            track.addEventListener('click', () => {
+                currentTrack = index;
+                loadTrack();
+                playTrack();
+            });
+        });
+
+        function loadTrack() {
+            audio.src = tracks[currentTrack].getAttribute('data-src');
+            trackInfo.textContent = `در حال پخش: ${tracks[currentTrack].textContent}`;
+            tracks.forEach(t => t.classList.remove('active'));
+            tracks[currentTrack].classList.add('active');
+        }
+
+        function playTrack() {
+            audio.play();
+            playBtn.textContent = '⏸';
+        }
+
+        function pauseTrack() {
+            audio.pause();
+            playBtn.textContent = '▶';
+        }
+
+        playBtn.addEventListener('click', () => {
+            if (audio.paused) playTrack();
+            else pauseTrack();
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+            loadTrack();
+            playTrack();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            currentTrack = (currentTrack + 1) % tracks.length;
+            loadTrack();
+            playTrack();
+        });
+
+        audio.addEventListener('timeupdate', () => {
+            const progressPercent = (audio.currentTime / audio.duration) * 100;
+            progress.style.width = `${progressPercent}%`;
+        });
+
+        progressBar.addEventListener('click', (e) => {
+            const rect = progressBar.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const width = rect.width;
+            audio.currentTime = (clickX / width) * audio.duration;
+        });
+
+        audio.addEventListener('ended', () => {
+            nextBtn.click();
+        });
+
+        // بارگذاری آهنگ اولیه
+        loadTrack();
     </script>
 </body>
 </html>
