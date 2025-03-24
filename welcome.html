@@ -17,6 +17,7 @@
             min-height: 100vh;
             background: linear-gradient(135deg, #1e1e2f, #3a3a5a, #2a2a4a);
             padding-top: 20px;
+            overflow-x: hidden;
         }
         .welcome-box {
             position: relative;
@@ -83,47 +84,47 @@
         .menu-btn {
             background: linear-gradient(90deg, #00d2ff, #3a7bd5);
             color: #fff;
-            padding: 10px 20px;
+            padding: 15px 30px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 20px;
             font-weight: bold;
             transition: all 0.3s ease;
         }
         .menu-btn:hover {
             background: linear-gradient(90deg, #3a7bd5, #00d2ff);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.7);
+            box-shadow: 0 0 20px rgba(0, 210, 255, 0.7);
         }
         .dropdown {
             position: absolute;
-            top: 50px;
+            top: 60px;
             left: 0;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
-            border-radius: 10px;
-            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            width: 200px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 300px;
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.3s ease;
         }
         .menu:hover .dropdown {
-            max-height: 300px;
+            max-height: 400px;
         }
         .dropdown a {
             display: block;
-            padding: 15px 20px;
+            padding: 20px 25px;
             color: #e0e0e0;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 18px;
             transition: all 0.3s ease;
         }
         .dropdown a:hover {
-            background: rgba(0, 210, 255, 0.2);
+            background: rgba(0, 210, 255, 0.3);
             color: #fff;
-            padding-left: 25px;
+            padding-left: 30px;
         }
         .music-player {
             margin-top: 30px;
@@ -308,6 +309,45 @@
             50% { transform: rotate(45deg) translate(30%, 30%); }
             100% { transform: rotate(45deg) translate(-30%, -30%); }
         }
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 300px;
+            padding: 15px;
+            background: rgba(0, 255, 210, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 255, 210, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 210, 0.3);
+            color: #fff;
+            font-size: 16px;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.5s ease;
+            z-index: 100;
+        }
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .notification::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(0, 255, 210, 0.2), rgba(255, 255, 255, 0));
+            transform: rotate(45deg);
+            animation: notifyGlow 3s infinite;
+            pointer-events: none;
+        }
+        @keyframes notifyGlow {
+            0% { transform: rotate(45deg) translate(-20%, -20%); }
+            50% { transform: rotate(45deg) translate(20%, 20%); }
+            100% { transform: rotate(45deg) translate(-20%, -20%); }
+        }
     </style>
 </head>
 <body>
@@ -374,6 +414,8 @@
             <a href="#">ثبت انتقاد</a>
         </div>
     </div>
+
+    <div class="notification" id="notification"></div>
 
     <script>
         function updateClock() {
@@ -454,6 +496,27 @@
         });
 
         loadTrack();
+
+        // نوتیفیکیشن فیک
+        const notifications = [
+            'علیرضا مبلغ ۲۹ دلار برداشت زد - ۴ دقیقه پیش',
+            'حسین مبلغ ۱۳ دلار برداشت زد - ۱۸ دقیقه پیش',
+            'محمدرضا مبلغ ۷۳ دلار برداشت زد - ۴۲ دقیقه پیش'
+        ];
+        const notificationElement = document.getElementById('notification');
+
+        function showNotification() {
+            const randomNotification = notifications[Math.floor(Math.random() * notifications.length)];
+            notificationElement.textContent = randomNotification;
+            notificationElement.classList.add('show');
+            setTimeout(() => {
+                notificationElement.classList.remove('show');
+            }, 5000); // ۵ ثانیه نمایش داده می‌شه
+        }
+
+        // هر ۱۷ دقیقه (۱۰۲۰ ثانیه) نوتیفیکیشن نشون داده می‌شه
+        setInterval(showNotification, 1020 * 1000);
+        showNotification(); // نمایش اولیه موقع لود صفحه
     </script>
 </body>
 </html>
