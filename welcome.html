@@ -285,7 +285,7 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-        .miner-link, .wheel-link, .loan-link, .snake-link {
+        .miner-link, .wheel-link, .loan-link, .snake-link, .captcha-link {
             width: 80%;
             max-width: 1200px;
             background: linear-gradient(90deg, #ffd700, #ff8c00);
@@ -304,7 +304,7 @@
             animation: minerPulse 2s infinite;
             display: block;
         }
-        .miner-link::before, .wheel-link::before, .loan-link::before, .snake-link::before {
+        .miner-link::before, .wheel-link::before, .loan-link::before, .snake-link::before, .captcha-link::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -316,7 +316,7 @@
             animation: minerShine 4s infinite;
             pointer-events: none;
         }
-        .miner-link:hover, .wheel-link:hover, .loan-link:hover, .snake-link:hover {
+        .miner-link:hover, .wheel-link:hover, .loan-link:hover, .snake-link:hover, .captcha-link:hover {
             transform: scale(1.02);
             box-shadow: 0 15px 50px rgba(255, 215, 0, 0.7);
             background: linear-gradient(90deg, #ff8c00, #ffd700);
@@ -589,7 +589,7 @@
     <a href="wheel.html" class="wheel-link">گردونه شانس</a>
     <a href="loan.html" class="loan-link">درخواست وام فوری</a>
     <a href="snake.html" class="snake-link">بازی دلاری</a>
-    <a href="captcha.html" class="captcha-link">حل کپچا و درآمد دلاری</a>
+    <a href="captcha.html" class="captcha-link">حل کپچا و درآمد</a>
     <div class="link-container">
         <a href="#" class="link-box">گزینه ۱</a>
         <a href="#" class="link-box">گزینه ۲</a>
@@ -628,7 +628,6 @@
     </div>
     <button class="logout-btn" onclick="window.location.href='index.html'">خروج</button>
     <div class="notification" id="notification"></div>
-
     <!-- پاپ‌آپ پیگیری سرور مجازی -->
     <div class="overlay" id="overlay"></div>
     <div class="popup" id="serverPopup">
@@ -650,7 +649,6 @@
         <div class="result" id="serverResult"></div>
         <a href="https://t.me/ad_pck" target="_blank" class="support-btn">ارتباط با پشتیبانی تلگرام</a>
     </div>
-
     <!-- پاپ‌آپ پیگیری تبدیل دلار به ریال -->
     <div class="popup" id="currencyConvertPopup">
         <h2>پیگیری تبدیل دلار به ریال</h2>
@@ -671,7 +669,6 @@
         <div class="result" id="convertResult"></div>
         <a href="https://t.me/ad_pck" target="_blank" class="support-btn">ارتباط با پشتیبانی تلگرام</a>
     </div>
-
     <!-- پاپ‌آپ ثبت انتقاد -->
     <div class="popup" id="complaintPopup">
         <h2>ثبت انتقاد</h2>
@@ -690,7 +687,6 @@
         <button class="check-btn" id="submitComplaintBtn">ارسال به مدیریت</button>
         <div class="result" id="complaintResult"></div>
     </div>
-
     <script>
         function updateClock() {
             const options = { timeZone: 'Asia/Tehran', hour12: false };
@@ -749,14 +745,11 @@
                 serverResult.style.color = '#ff4444';
                 return;
             }
-
             serverCheckBtn.disabled = true;
             serverCountdown.style.display = 'block';
             serverResult.style.display = 'none';
-
             let timeLeft = 10;
             serverCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
-
             const countdown = setInterval(() => {
                 timeLeft--;
                 serverCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
@@ -794,14 +787,11 @@
                 convertResult.style.color = '#ff4444';
                 return;
             }
-
             convertCheckBtn.disabled = true;
             convertCountdown.style.display = 'block';
             convertResult.style.display = 'none';
-
             let timeLeft = 10;
             convertCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
-
             const countdown = setInterval(() => {
                 timeLeft--;
                 convertCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
@@ -836,10 +826,8 @@
                 complaintResult.style.color = '#ff4444';
                 return;
             }
-
             submitComplaintBtn.disabled = true;
             complaintResult.style.display = 'none';
-
             setTimeout(() => {
                 complaintResult.textContent = 'با موفقیت ارسال شد';
                 complaintResult.classList.add('success');
