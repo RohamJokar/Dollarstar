@@ -285,7 +285,7 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
-        .miner-link, .wheel-link, .loan-link, .snake-link, .captcha-link {
+        .miner-link, .wheel-link, .loan-link, .snake-link {
             width: 80%;
             max-width: 1200px;
             background: linear-gradient(90deg, #ffd700, #ff8c00);
@@ -304,7 +304,7 @@
             animation: minerPulse 2s infinite;
             display: block;
         }
-        .miner-link::before, .wheel-link::before, .loan-link::before, .snake-link::before, .captcha-link::before {
+        .miner-link::before, .wheel-link::before, .loan-link::before, .snake-link::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -316,7 +316,7 @@
             animation: minerShine 4s infinite;
             pointer-events: none;
         }
-        .miner-link:hover, .wheel-link:hover, .loan-link:hover, .snake-link:hover, .captcha-link:hover {
+        .miner-link:hover, .wheel-link:hover, .loan-link:hover, .snake-link:hover {
             transform: scale(1.02);
             box-shadow: 0 15px 50px rgba(255, 215, 0, 0.7);
             background: linear-gradient(90deg, #ff8c00, #ffd700);
@@ -390,6 +390,163 @@
         .logout-btn:hover {
             background: linear-gradient(90deg, #ff6666, #ff4444);
             box-shadow: 0 0 20px rgba(255, 66, 66, 0.7);
+        }
+        /* استایل پاپ‌آپ‌ها */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 998;
+        }
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            z-index: 999;
+            overflow: hidden;
+        }
+        .popup::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(0, 255, 210, 0.2), rgba(255, 255, 255, 0));
+            transform: rotate(45deg);
+            pointer-events: none;
+            animation: shine 5s infinite;
+        }
+        .popup h2 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(0, 255, 210, 0.7);
+        }
+        .input-box {
+            margin-bottom: 20px;
+        }
+        .input-box label {
+            color: #e0e0e0;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .input-box input, .input-box textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 5px 15px rgba(0, 255, 210, 0.2);
+            transition: all 0.3s ease;
+            resize: none;
+        }
+        .input-box input:focus, .input-box textarea:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 255, 210, 0.5);
+        }
+        .select-box {
+            margin-bottom: 30px;
+        }
+        .select-box label {
+            color: #e0e0e0;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .select-box select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            appearance: none;
+            box-shadow: 0 5px 15px rgba(0, 255, 210, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .select-box select:hover {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 255, 210, 0.5);
+        }
+        .check-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.5);
+        }
+        .check-btn:hover {
+            background: linear-gradient(90deg, #3a7bd5, #00d2ff);
+            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.7);
+        }
+        .check-btn:disabled {
+            background: gray;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        .countdown {
+            font-size: 20px;
+            color: #ffd700;
+            margin-top: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            display: none;
+        }
+        .result {
+            font-size: 18px;
+            color: #ff4444;
+            margin-top: 20px;
+            text-shadow: 0 0 5px rgba(255, 66, 66, 0.7);
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        .success {
+            color: #28a745;
+            text-shadow: 0 0 5px rgba(40, 167, 69, 0.7);
+        }
+        .support-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: linear-gradient(90deg, #28a745, #218838);
+            border-radius: 25px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.5);
+        }
+        .support-btn:hover {
+            background: linear-gradient(90deg, #218838, #28a745);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.7);
         }
     </style>
 </head>
@@ -472,6 +629,68 @@
     <button class="logout-btn" onclick="window.location.href='index.html'">خروج</button>
     <div class="notification" id="notification"></div>
 
+    <!-- پاپ‌آپ پیگیری سرور مجازی -->
+    <div class="overlay" id="overlay"></div>
+    <div class="popup" id="serverPopup">
+        <h2>پیگیری سرور مجازی</h2>
+        <div class="input-box">
+            <label>آی‌دی تلگرام</label>
+            <input type="text" id="telegramId" placeholder="مثال: @username" required>
+        </div>
+        <div class="select-box">
+            <label>لوکیشن سرور</label>
+            <select id="serverLocation">
+                <option value="iran">ایران</option>
+                <option value="usa">آمریکا</option>
+                <option value="netherlands">هلند</option>
+            </select>
+        </div>
+        <button class="check-btn" id="serverCheckBtn">بررسی</button>
+        <div class="countdown" id="serverCountdown"></div>
+        <div class="result" id="serverResult"></div>
+        <a href="https://t.me/ad_pck" target="_blank" class="support-btn">ارتباط با پشتیبانی تلگرام</a>
+    </div>
+
+    <!-- پاپ‌آپ پیگیری تبدیل دلار به ریال -->
+    <div class="popup" id="currencyConvertPopup">
+        <h2>پیگیری تبدیل دلار به ریال</h2>
+        <div class="input-box">
+            <label>مقدار دلار (USD)</label>
+            <input type="number" id="dollarAmount" placeholder="مثال: 100" step="0.01" required>
+        </div>
+        <div class="input-box">
+            <label>تاریخ ثبت درخواست</label>
+            <input type="date" id="requestDate" required lang="fa-IR">
+        </div>
+        <div class="input-box">
+            <label>شماره کارت</label>
+            <input type="text" id="cardNumber" placeholder="مثال: 1234-5678-9012-3456" maxlength="19" required>
+        </div>
+        <button class="check-btn" id="convertCheckBtn">بررسی</button>
+        <div class="countdown" id="convertCountdown"></div>
+        <div class="result" id="convertResult"></div>
+        <a href="https://t.me/ad_pck" target="_blank" class="support-btn">ارتباط با پشتیبانی تلگرام</a>
+    </div>
+
+    <!-- پاپ‌آپ ثبت انتقاد -->
+    <div class="popup" id="complaintPopup">
+        <h2>ثبت انتقاد</h2>
+        <div class="input-box">
+            <label>متن پیام خود را بنویسید</label>
+            <textarea id="complaintMessage" rows="5" placeholder="انتقاد خود را اینجا بنویسید" required></textarea>
+        </div>
+        <div class="select-box">
+            <label>اولویت</label>
+            <select id="complaintPriority">
+                <option value="low">کم</option>
+                <option value="medium">متوسط</option>
+                <option value="high">زیاد</option>
+            </select>
+        </div>
+        <button class="check-btn" id="submitComplaintBtn">ارسال به مدیریت</button>
+        <div class="result" id="complaintResult"></div>
+    </div>
+
     <script>
         function updateClock() {
             const options = { timeZone: 'Asia/Tehran', hour12: false };
@@ -498,10 +717,176 @@
         setInterval(showNotification, 180 * 1000);
         showNotification();
 
+        // کنترل منو با کلیک
         const menu = document.querySelector('.menu');
         const menuToggle = document.getElementById('menuToggle');
         menuToggle.addEventListener('click', () => {
             menu.classList.toggle('active');
+        });
+
+        // کنترل پاپ‌آپ‌ها
+        const overlay = document.getElementById('overlay');
+
+        // پاپ‌آپ سرور مجازی
+        const serverStatusLink = document.getElementById('serverStatusLink');
+        const serverPopup = document.getElementById('serverPopup');
+        const serverCheckBtn = document.getElementById('serverCheckBtn');
+        const serverCountdown = document.getElementById('serverCountdown');
+        const serverResult = document.getElementById('serverResult');
+        const telegramIdInput = document.getElementById('telegramId');
+
+        serverStatusLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            serverPopup.style.display = 'block';
+            overlay.style.display = 'block';
+            menu.classList.remove('active');
+        });
+
+        serverCheckBtn.addEventListener('click', () => {
+            if (!telegramIdInput.value) {
+                serverResult.textContent = 'لطفاً آی‌دی تلگرام را وارد کنید!';
+                serverResult.style.display = 'block';
+                serverResult.style.color = '#ff4444';
+                return;
+            }
+
+            serverCheckBtn.disabled = true;
+            serverCountdown.style.display = 'block';
+            serverResult.style.display = 'none';
+
+            let timeLeft = 10;
+            serverCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                serverCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    serverCountdown.style.display = 'none';
+                    serverResult.textContent = 'متاسفانه سرور مجازی شما هنوز از طرف ارائه‌دهنده ارسال نشده است.';
+                    serverResult.style.display = 'block';
+                    serverCheckBtn.disabled = false;
+                }
+            }, 1000);
+        });
+
+        // پاپ‌آپ تبدیل دلار به ریال
+        const currencyConvertLink = document.getElementById('currencyConvertLink');
+        const currencyConvertPopup = document.getElementById('currencyConvertPopup');
+        const convertCheckBtn = document.getElementById('convertCheckBtn');
+        const convertCountdown = document.getElementById('convertCountdown');
+        const convertResult = document.getElementById('convertResult');
+        const dollarAmountInput = document.getElementById('dollarAmount');
+        const requestDateInput = document.getElementById('requestDate');
+        const cardNumberInput = document.getElementById('cardNumber');
+
+        currencyConvertLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            currencyConvertPopup.style.display = 'block';
+            overlay.style.display = 'block';
+            menu.classList.remove('active');
+        });
+
+        convertCheckBtn.addEventListener('click', () => {
+            if (!dollarAmountInput.value || !requestDateInput.value || !cardNumberInput.value) {
+                convertResult.textContent = 'لطفاً تمام فیلدها را پر کنید!';
+                convertResult.style.display = 'block';
+                convertResult.style.color = '#ff4444';
+                return;
+            }
+
+            convertCheckBtn.disabled = true;
+            convertCountdown.style.display = 'block';
+            convertResult.style.display = 'none';
+
+            let timeLeft = 10;
+            convertCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                convertCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    convertCountdown.style.display = 'none';
+                    convertResult.textContent = 'مقادیر ارسال شده نامعتبر می‌باشد.';
+                    convertResult.style.display = 'block';
+                    convertCheckBtn.disabled = false;
+                }
+            }, 1000);
+        });
+
+        // پاپ‌آپ ثبت انتقاد
+        const complaintLink = document.getElementById('complaintLink');
+        const complaintPopup = document.getElementById('complaintPopup');
+        const submitComplaintBtn = document.getElementById('submitComplaintBtn');
+        const complaintResult = document.getElementById('complaintResult');
+        const complaintMessageInput = document.getElementById('complaintMessage');
+
+        complaintLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            complaintPopup.style.display = 'block';
+            overlay.style.display = 'block';
+            menu.classList.remove('active');
+        });
+
+        submitComplaintBtn.addEventListener('click', () => {
+            if (!complaintMessageInput.value) {
+                complaintResult.textContent = 'لطفاً متن انتقاد را وارد کنید!';
+                complaintResult.style.display = 'block';
+                complaintResult.style.color = '#ff4444';
+                return;
+            }
+
+            submitComplaintBtn.disabled = true;
+            complaintResult.style.display = 'none';
+
+            setTimeout(() => {
+                complaintResult.textContent = 'با موفقیت ارسال شد';
+                complaintResult.classList.add('success');
+                complaintResult.style.display = 'block';
+                submitComplaintBtn.disabled = false;
+            }, 500); // تاخیر کوچک برای شبیه‌سازی ارسال
+        });
+
+        // بستن پاپ‌آپ با کلیک روی overlay
+        overlay.addEventListener('click', () => {
+            serverPopup.style.display = 'none';
+            currencyConvertPopup.style.display = 'none';
+            complaintPopup.style.display = 'none';
+            overlay.style.display = 'none';
+            resetServerPopup();
+            resetConvertPopup();
+            resetComplaintPopup();
+        });
+
+        function resetServerPopup() {
+            telegramIdInput.value = '';
+            serverCountdown.style.display = 'none';
+            serverResult.style.display = 'none';
+            serverCheckBtn.disabled = false;
+        }
+
+        function resetConvertPopup() {
+            dollarAmountInput.value = '';
+            requestDateInput.value = '';
+            cardNumberInput.value = '';
+            convertCountdown.style.display = 'none';
+            convertResult.style.display = 'none';
+            convertCheckBtn.disabled = false;
+        }
+
+        function resetComplaintPopup() {
+            complaintMessageInput.value = '';
+            complaintResult.style.display = 'none';
+            complaintResult.classList.remove('success');
+            submitComplaintBtn.disabled = false;
+        }
+
+        // فرمت شماره کارت (xxxx-xxxx-xxxx-xxxx)
+        cardNumberInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '').substring(0, 16);
+            value = value.replace(/(\d{4})(?=\d)/g, '$1-');
+            e.target.value = value;
         });
     </script>
 </body>
