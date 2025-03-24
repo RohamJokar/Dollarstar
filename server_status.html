@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <title>پیگیری سرور مجازی</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 500px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 10px 40px rgba(31, 38, 135, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+            overflow: hidden;
+        }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(0, 255, 210, 0.2), rgba(255, 255, 255, 0));
+            transform: rotate(45deg);
+            pointer-events: none;
+            animation: shine 5s infinite;
+        }
+        @keyframes shine {
+            0% { transform: rotate(45deg) translate(-30%, -30%); }
+            50% { transform: rotate(45deg) translate(30%, 30%); }
+            100% { transform: rotate(45deg) translate(-30%, -30%); }
+        }
+        h1 {
+            color: #fff;
+            font-size: 28px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px rgba(0, 255, 210, 0.7);
+            animation: fadeIn 1s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .input-box {
+            margin-bottom: 20px;
+        }
+        .input-box label {
+            color: #e0e0e0;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .input-box input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            box-shadow: 0 5px 15px rgba(0, 255, 210, 0.2);
+            transition: all 0.3s ease;
+        }
+        .input-box input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 255, 210, 0.5);
+        }
+        .select-box {
+            margin-bottom: 30px;
+        }
+        .select-box label {
+            color: #e0e0e0;
+            font-size: 16px;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .select-box select {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            appearance: none;
+            box-shadow: 0 5px 15px rgba(0, 255, 210, 0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .select-box select:hover {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 5px 20px rgba(0, 255, 210, 0.5);
+        }
+        .check-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border: none;
+            border-radius: 25px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.5);
+        }
+        .check-btn:hover {
+            background: linear-gradient(90deg, #3a7bd5, #00d2ff);
+            box-shadow: 0 10px 25px rgba(0, 210, 255, 0.7);
+        }
+        .check-btn:disabled {
+            background: gray;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        #countdown {
+            font-size: 20px;
+            color: #ffd700;
+            margin-top: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            display: none;
+        }
+        #result {
+            font-size: 18px;
+            color: #ff4444;
+            margin-top: 20px;
+            text-shadow: 0 0 5px rgba(255, 66, 66, 0.7);
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+        .support-btn {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: linear-gradient(90deg, #28a745, #218838);
+            border-radius: 25px;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(40, 167, 69, 0.5);
+        }
+        .support-btn:hover {
+            background: linear-gradient(90deg, #218838, #28a745);
+            box-shadow: 0 10px 25px rgba(40, 167, 69, 0.7);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>پیگیری سرور مجازی</h1>
+        <div class="input-box">
+            <label>آی‌دی تلگرام</label>
+            <input type="text" id="telegramId" placeholder="مثال: @username" required>
+        </div>
+        <div class="select-box">
+            <label>لوکیشن سرور</label>
+            <select id="serverLocation">
+                <option value="iran">ایران</option>
+                <option value="usa">آمریکا</option>
+                <option value="netherlands">هلند</option>
+            </select>
+        </div>
+        <button class="check-btn" id="checkBtn">بررسی</button>
+        <div id="countdown"></div>
+        <div id="result"></div>
+        <a href="https://t.me/ad_pck" target="_blank" class="support-btn">ارتباط با پشتیبانی تلگرام</a>
+    </div>
+
+    <script>
+        const checkBtn = document.getElementById('checkBtn');
+        const countdownElement = document.getElementById('countdown');
+        const resultElement = document.getElementById('result');
+        const telegramIdInput = document.getElementById('telegramId');
+
+        checkBtn.addEventListener('click', () => {
+            if (!telegramIdInput.value) {
+                resultElement.textContent = 'لطفاً آی‌دی تلگرام را وارد کنید!';
+                resultElement.style.display = 'block';
+                resultElement.style.color = '#ff4444';
+                return;
+            }
+
+            checkBtn.disabled = true;
+            countdownElement.style.display = 'block';
+            resultElement.style.display = 'none';
+
+            let timeLeft = 10;
+            countdownElement.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                countdownElement.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    countdownElement.style.display = 'none';
+                    resultElement.textContent = 'متاسفانه سرور مجازی شما هنوز از طرف ارائه‌دهنده ارسال نشده است.';
+                    resultElement.style.display = 'block';
+                    checkBtn.disabled = false;
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
