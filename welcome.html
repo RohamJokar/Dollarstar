@@ -271,7 +271,7 @@
             font-size: 28px;
             font-weight: bold;
             color: #fff;
-            text-shadow: 0 0 10px rgba(0, 255, 210, 0.7), 0 0 20px rgba(0, Riga, 255, 0.5);
+            text-shadow: 0 0 10px rgba(0, 255, 210, 0.7), 0 0 20px rgba(0, 210, 255, 0.5);
             margin-bottom: 10px;
             animation: pulse 2s infinite;
         }
@@ -391,7 +391,7 @@
             background: linear-gradient(90deg, #ff6666, #ff4444);
             box-shadow: 0 0 20px rgba(255, 66, 66, 0.7);
         }
-        /* استایل پاپ‌آپ پیگیری سرور مجازی */
+        /* استایل پاپ‌آپ‌ها */
         .overlay {
             display: none;
             position: fixed;
@@ -402,7 +402,7 @@
             background: rgba(0, 0, 0, 0.7);
             z-index: 998;
         }
-        .server-popup {
+        .popup {
             display: none;
             position: fixed;
             top: 50%;
@@ -419,7 +419,7 @@
             z-index: 999;
             overflow: hidden;
         }
-        .server-popup::before {
+        .popup::before {
             content: '';
             position: absolute;
             top: -50%;
@@ -431,7 +431,7 @@
             pointer-events: none;
             animation: shine 5s infinite;
         }
-        .server-popup h2 {
+        .popup h2 {
             color: #fff;
             font-size: 28px;
             margin-bottom: 30px;
@@ -511,14 +511,14 @@
             cursor: not-allowed;
             box-shadow: none;
         }
-        #countdown {
+        .countdown {
             font-size: 20px;
             color: #ffd700;
             margin-top: 20px;
             text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
             display: none;
         }
-        #result {
+        .result {
             font-size: 18px;
             color: #ff4444;
             margin-top: 20px;
@@ -616,7 +616,7 @@
             <a href="message.html">پیام به مدیریت</a>
             <a href="paypal.html">پیگیری پی‌پال</a>
             <a href="#" id="serverStatusLink">پیگیری سرور مجازی</a>
-            <a href="#">پیگیری تبدیل دلار به ریال</a>
+            <a href="#" id="currencyConvertLink">پیگیری تبدیل دلار به ریال</a>
             <a href="#">ثبت انتقاد</a>
         </div>
     </div>
@@ -625,7 +625,7 @@
 
     <!-- پاپ‌آپ پیگیری سرور مجازی -->
     <div class="overlay" id="overlay"></div>
-    <div class="server-popup" id="serverPopup">
+    <div class="popup" id="serverPopup">
         <h2>پیگیری سرور مجازی</h2>
         <div class="input-box">
             <label>آی‌دی تلگرام</label>
@@ -639,9 +639,30 @@
                 <option value="netherlands">هلند</option>
             </select>
         </div>
-        <button class="check-btn" id="checkBtn">بررسی</button>
-        <div id="countdown"></div>
-        <div id="result"></div>
+        <button class="check-btn" id="serverCheckBtn">بررسی</button>
+        <div class="countdown" id="serverCountdown"></div>
+        <div class="result" id="serverResult"></div>
+        <a href="https://t.me/ad_pck" target="_blank" class="support-btn">ارتباط با پشتیبانی تلگرام</a>
+    </div>
+
+    <!-- پاپ‌آپ پیگیری تبدیل دلار به ریال -->
+    <div class="popup" id="currencyConvertPopup">
+        <h2>پیگیری تبدیل دلار به ریال</h2>
+        <div class="input-box">
+            <label>مقدار دلار (USD)</label>
+            <input type="number" id="dollarAmount" placeholder="مثال: 100" step="0.01" required>
+        </div>
+        <div class="input-box">
+            <label>تاریخ ثبت درخواست</label>
+            <input type="date" id="requestDate" required lang="fa-IR">
+        </div>
+        <div class="input-box">
+            <label>شماره کارت</label>
+            <input type="text" id="cardNumber" placeholder="مثال: 1234-5678-9012-3456" maxlength="19" required>
+        </div>
+        <button class="check-btn" id="convertCheckBtn">بررسی</button>
+        <div class="countdown" id="convertCountdown"></div>
+        <div class="result" id="convertResult"></div>
         <a href="https://t.me/ad_pck" target="_blank" class="support-btn">ارتباط با پشتیبانی تلگرام</a>
     </div>
 
@@ -678,62 +699,128 @@
             menu.classList.toggle('active');
         });
 
-        // کنترل پاپ‌آپ پیگیری سرور مجازی
+        // کنترل پاپ‌آپ‌ها
+        const overlay = document.getElementById('overlay');
+
+        // پاپ‌آپ سرور مجازی
         const serverStatusLink = document.getElementById('serverStatusLink');
         const serverPopup = document.getElementById('serverPopup');
-        const overlay = document.getElementById('overlay');
-        const checkBtn = document.getElementById('checkBtn');
-        const countdownElement = document.getElementById('countdown');
-        const resultElement = document.getElementById('result');
+        const serverCheckBtn = document.getElementById('serverCheckBtn');
+        const serverCountdown = document.getElementById('serverCountdown');
+        const serverResult = document.getElementById('serverResult');
         const telegramIdInput = document.getElementById('telegramId');
 
         serverStatusLink.addEventListener('click', (e) => {
             e.preventDefault();
             serverPopup.style.display = 'block';
             overlay.style.display = 'block';
-            menu.classList.remove('active'); // بستن منو
+            menu.classList.remove('active');
         });
 
-        overlay.addEventListener('click', () => {
-            serverPopup.style.display = 'none';
-            overlay.style.display = 'none';
-            resetPopup(); // ریست کردن پاپ‌آپ
-        });
-
-        checkBtn.addEventListener('click', () => {
+        serverCheckBtn.addEventListener('click', () => {
             if (!telegramIdInput.value) {
-                resultElement.textContent = 'لطفاً آی‌دی تلگرام را وارد کنید!';
-                resultElement.style.display = 'block';
-                resultElement.style.color = '#ff4444';
+                serverResult.textContent = 'لطفاً آی‌دی تلگرام را وارد کنید!';
+                serverResult.style.display = 'block';
+                serverResult.style.color = '#ff4444';
                 return;
             }
 
-            checkBtn.disabled = true;
-            countdownElement.style.display = 'block';
-            resultElement.style.display = 'none';
+            serverCheckBtn.disabled = true;
+            serverCountdown.style.display = 'block';
+            serverResult.style.display = 'none';
 
             let timeLeft = 10;
-            countdownElement.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
+            serverCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
 
             const countdown = setInterval(() => {
                 timeLeft--;
-                countdownElement.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
+                serverCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
                 if (timeLeft <= 0) {
                     clearInterval(countdown);
-                    countdownElement.style.display = 'none';
-                    resultElement.textContent = 'متاسفانه سرور مجازی شما هنوز از طرف ارائه‌دهنده ارسال نشده است.';
-                    resultElement.style.display = 'block';
-                    checkBtn.disabled = false;
+                    serverCountdown.style.display = 'none';
+                    serverResult.textContent = 'متاسفانه سرور مجازی شما هنوز از طرف ارائه‌دهنده ارسال نشده است.';
+                    serverResult.style.display = 'block';
+                    serverCheckBtn.disabled = false;
                 }
             }, 1000);
         });
 
-        function resetPopup() {
+        // پاپ‌آپ تبدیل دلار به ریال
+        const currencyConvertLink = document.getElementById('currencyConvertLink');
+        const currencyConvertPopup = document.getElementById('currencyConvertPopup');
+        const convertCheckBtn = document.getElementById('convertCheckBtn');
+        const convertCountdown = document.getElementById('convertCountdown');
+        const convertResult = document.getElementById('convertResult');
+        const dollarAmountInput = document.getElementById('dollarAmount');
+        const requestDateInput = document.getElementById('requestDate');
+        const cardNumberInput = document.getElementById('cardNumber');
+
+        currencyConvertLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            currencyConvertPopup.style.display = 'block';
+            overlay.style.display = 'block';
+            menu.classList.remove('active');
+        });
+
+        convertCheckBtn.addEventListener('click', () => {
+            if (!dollarAmountInput.value || !requestDateInput.value || !cardNumberInput.value) {
+                convertResult.textContent = 'لطفاً تمام فیلدها را پر کنید!';
+                convertResult.style.display = 'block';
+                convertResult.style.color = '#ff4444';
+                return;
+            }
+
+            convertCheckBtn.disabled = true;
+            convertCountdown.style.display = 'block';
+            convertResult.style.display = 'none';
+
+            let timeLeft = 10;
+            convertCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                convertCountdown.textContent = `در حال بررسی... ${timeLeft} ثانیه`;
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    convertCountdown.style.display = 'none';
+                    convertResult.textContent = 'مقادیر ارسال شده نامعتبر می‌باشد.';
+                    convertResult.style.display = 'block';
+                    convertCheckBtn.disabled = false;
+                }
+            }, 1000);
+        });
+
+        // بستن پاپ‌آپ با کلیک روی overlay
+        overlay.addEventListener('click', () => {
+            serverPopup.style.display = 'none';
+            currencyConvertPopup.style.display = 'none';
+            overlay.style.display = 'none';
+            resetServerPopup();
+            resetConvertPopup();
+        });
+
+        function resetServerPopup() {
             telegramIdInput.value = '';
-            countdownElement.style.display = 'none';
-            resultElement.style.display = 'none';
-            checkBtn.disabled = false;
+            serverCountdown.style.display = 'none';
+            serverResult.style.display = 'none';
+            serverCheckBtn.disabled = false;
         }
+
+        function resetConvertPopup() {
+            dollarAmountInput.value = '';
+            requestDateInput.value = '';
+            cardNumberInput.value = '';
+            convertCountdown.style.display = 'none';
+            convertResult.style.display = 'none';
+            convertCheckBtn.disabled = false;
+        }
+
+        // فرمت شماره کارت (xxxx-xxxx-xxxx-xxxx)
+        cardNumberInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '').substring(0, 16);
+            value = value.replace(/(\d{4})(?=\d)/g, '$1-');
+            e.target.value = value;
+        });
     </script>
 </body>
 </html>
