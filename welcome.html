@@ -12,11 +12,11 @@
         }
         body {
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #1e1e2f, #3a3a5a, #2a2a4a);
-            position: relative;
+            padding-top: 20px; /* فاصله از بالا */
         }
         .welcome-box {
             position: relative;
@@ -29,6 +29,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
             overflow: hidden;
+            margin-bottom: 40px; /* فاصله از لینک‌ها */
         }
         .welcome-box::before {
             content: '';
@@ -50,7 +51,6 @@
         h1 {
             color: #fff;
             font-size: 36px;
-            margin-top: -20px;
             margin-bottom: 40px;
             text-transform: uppercase;
             letter-spacing: 3px;
@@ -194,6 +194,36 @@
             background: rgba(0, 210, 255, 0.2);
             color: #fff;
         }
+
+        /* استایل لینک‌های گرافیکی */
+        .link-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* ۴ ستون */
+            gap: 20px;
+            width: 80%;
+            max-width: 1200px;
+            padding-bottom: 40px;
+        }
+        .link-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #e0e0e0;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 255, 210, 0.2);
+            transition: all 0.3s ease;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .link-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 255, 210, 0.5);
+            background: rgba(0, 210, 255, 0.1);
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -220,6 +250,30 @@
                 <div data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">آهنگ 3</div>
             </div>
         </div>
+    </div>
+
+    <!-- لینک‌های گرافیکی -->
+    <div class="link-container">
+        <a href="#" class="link-box">گزینه ۱</a>
+        <a href="#" class="link-box">گزینه ۲</a>
+        <a href="#" class="link-box">گزینه ۳</a>
+        <a href="#" class="link-box">گزینه ۴</a>
+        <a href="#" class="link-box">گزینه ۵</a>
+        <a href="#" class="link-box">گزینه ۶</a>
+        <a href="#" class="link-box">گزینه ۷</a>
+        <a href="#" class="link-box">گزینه ۸</a>
+        <a href="#" class="link-box">گزینه ۹</a>
+        <a href="#" class="link-box">گزینه ۱۰</a>
+        <a href="#" class="link-box">گزینه ۱۱</a>
+        <a href="#" class="link-box">گزینه ۱۲</a>
+        <a href="#" class="link-box">گزینه ۱۳</a>
+        <a href="#" class="link-box">گزینه ۱۴</a>
+        <a href="#" class="link-box">گزینه ۱۵</a>
+        <a href="#" class="link-box">گزینه ۱۶</a>
+        <a href="#" class="link-box">گزینه ۱۷</a>
+        <a href="#" class="link-box">گزینه ۱۸</a>
+        <a href="#" class="link-box">گزینه ۱۹</a>
+        <a href="#" class="link-box">گزینه ۲۰</a>
     </div>
 
     <!-- منوی کشویی -->
@@ -255,7 +309,6 @@
         const trackList = document.getElementById('track-list').children;
         let currentTrack = 0;
 
-        // تنظیم آهنگ‌ها
         const tracks = Array.from(trackList);
         tracks.forEach((track, index) => {
             track.addEventListener('click', () => {
@@ -315,7 +368,6 @@
             nextBtn.click();
         });
 
-        // بارگذاری آهنگ اولیه
         loadTrack();
     </script>
 </body>
