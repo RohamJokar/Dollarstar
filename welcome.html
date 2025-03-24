@@ -446,7 +446,7 @@
             display: block;
             margin-bottom: 10px;
         }
-        .input-box input {
+        .input-box input, .input-box textarea {
             width: 100%;
             padding: 12px;
             border: none;
@@ -457,8 +457,9 @@
             outline: none;
             box-shadow: 0 5px 15px rgba(0, 255, 210, 0.2);
             transition: all 0.3s ease;
+            resize: none;
         }
-        .input-box input:focus {
+        .input-box input:focus, .input-box textarea:focus {
             background: rgba(255, 255, 255, 0.3);
             box-shadow: 0 5px 20px rgba(0, 255, 210, 0.5);
         }
@@ -525,6 +526,10 @@
             text-shadow: 0 0 5px rgba(255, 66, 66, 0.7);
             display: none;
             animation: fadeIn 0.5s ease-in;
+        }
+        .success {
+            color: #28a745;
+            text-shadow: 0 0 5px rgba(40, 167, 69, 0.7);
         }
         .support-btn {
             display: inline-block;
@@ -617,7 +622,7 @@
             <a href="paypal.html">پیگیری پی‌پال</a>
             <a href="#" id="serverStatusLink">پیگیری سرور مجازی</a>
             <a href="#" id="currencyConvertLink">پیگیری تبدیل دلار به ریال</a>
-            <a href="#">ثبت انتقاد</a>
+            <a href="#" id="complaintLink">ثبت انتقاد</a>
         </div>
     </div>
     <button class="logout-btn" onclick="window.location.href='index.html'">خروج</button>
@@ -664,6 +669,25 @@
         <div class="countdown" id="convertCountdown"></div>
         <div class="result" id="convertResult"></div>
         <a href="https://t.me/ad_pck" target="_blank" class="support-btn">ارتباط با پشتیبانی تلگرام</a>
+    </div>
+
+    <!-- پاپ‌آپ ثبت انتقاد -->
+    <div class="popup" id="complaintPopup">
+        <h2>ثبت انتقاد</h2>
+        <div class="input-box">
+            <label>متن پیام خود را بنویسید</label>
+            <textarea id="complaintMessage" rows="5" placeholder="انتقاد خود را اینجا بنویسید" required></textarea>
+        </div>
+        <div class="select-box">
+            <label>اولویت</label>
+            <select id="complaintPriority">
+                <option value="low">کم</option>
+                <option value="medium">متوسط</option>
+                <option value="high">زیاد</option>
+            </select>
+        </div>
+        <button class="check-btn" id="submitComplaintBtn">ارسال به مدیریت</button>
+        <div class="result" id="complaintResult"></div>
     </div>
 
     <script>
@@ -790,13 +814,48 @@
             }, 1000);
         });
 
+        // پاپ‌آپ ثبت انتقاد
+        const complaintLink = document.getElementById('complaintLink');
+        const complaintPopup = document.getElementById('complaintPopup');
+        const submitComplaintBtn = document.getElementById('submitComplaintBtn');
+        const complaintResult = document.getElementById('complaintResult');
+        const complaintMessageInput = document.getElementById('complaintMessage');
+
+        complaintLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            complaintPopup.style.display = 'block';
+            overlay.style.display = 'block';
+            menu.classList.remove('active');
+        });
+
+        submitComplaintBtn.addEventListener('click', () => {
+            if (!complaintMessageInput.value) {
+                complaintResult.textContent = 'لطفاً متن انتقاد را وارد کنید!';
+                complaintResult.style.display = 'block';
+                complaintResult.style.color = '#ff4444';
+                return;
+            }
+
+            submitComplaintBtn.disabled = true;
+            complaintResult.style.display = 'none';
+
+            setTimeout(() => {
+                complaintResult.textContent = 'با موفقیت ارسال شد';
+                complaintResult.classList.add('success');
+                complaintResult.style.display = 'block';
+                submitComplaintBtn.disabled = false;
+            }, 500); // تاخیر کوچک برای شبیه‌سازی ارسال
+        });
+
         // بستن پاپ‌آپ با کلیک روی overlay
         overlay.addEventListener('click', () => {
             serverPopup.style.display = 'none';
             currencyConvertPopup.style.display = 'none';
+            complaintPopup.style.display = 'none';
             overlay.style.display = 'none';
             resetServerPopup();
             resetConvertPopup();
+            resetComplaintPopup();
         });
 
         function resetServerPopup() {
@@ -813,6 +872,13 @@
             convertCountdown.style.display = 'none';
             convertResult.style.display = 'none';
             convertCheckBtn.disabled = false;
+        }
+
+        function resetComplaintPopup() {
+            complaintMessageInput.value = '';
+            complaintResult.style.display = 'none';
+            complaintResult.classList.remove('success');
+            submitComplaintBtn.disabled = false;
         }
 
         // فرمت شماره کارت (xxxx-xxxx-xxxx-xxxx)
