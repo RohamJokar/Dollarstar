@@ -152,6 +152,7 @@
             position: relative;
             overflow: hidden;
             box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5);
+            margin-bottom: 20px;
         }
         .start-btn::before {
             content: '₿';
@@ -166,6 +167,46 @@
             transform: scale(1.05);
             box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
             background: linear-gradient(90deg, #ff8c00, #ffd700);
+        }
+        .withdraw-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+        }
+        .withdraw-section h3 {
+            color: #ffd700;
+            font-size: 22px;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        .withdraw-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 215, 0, 0.5);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 16px;
+        }
+        .withdraw-btn {
+            background: linear-gradient(90deg, #ff8c00, #ffd700);
+            border: none;
+            border-radius: 15px;
+            padding: 12px 30px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .withdraw-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
         }
         .back-link {
             display: block;
@@ -198,10 +239,25 @@
                 <option value="ETH" data-speed="0.03" data-premium="true">اتریوم (پرمیوم)</option>
                 <option value="WBTC" data-speed="0.04" data-premium="true">رپد بیت‌کوین (پرمیوم)</option>
                 <option value="PAXG" data-speed="0.02" data-premium="true">پکس گلد (پرمیوم)</option>
-                <option value="XMR" data-speed="0.01" data-premium="false">مونرو</option>
+                <option value="XMR" data-speed="0.000001" data-premium="false">مونرو</option>
             </select>
         </div>
         <button class="start-btn" id="start-mining">شروع ماین</button>
+        
+        <!-- بخش برداشت ارز -->
+        <div class="withdraw-section">
+            <h3>برداشت ارز</h3>
+            <input type="text" class="withdraw-input" id="wallet-link" placeholder="لینک ولت خود را وارد کنید">
+            <select class="withdraw-input" id="withdraw-currency">
+                <option value="BTC">بیت‌کوین</option>
+                <option value="ETH">اتریوم</option>
+                <option value="WBTC">رپد بیت‌کوین</option>
+                <option value="PAXG">پکس گلد</option>
+                <option value="XMR">مونرو</option>
+            </select>
+            <button class="withdraw-btn" id="withdraw-btn">برداشت</button>
+        </div>
+
         <a href="welcome.html" class="back-link">بازگشت به صفحه اصلی</a>
         <div id="particles"></div>
     </div>
@@ -212,6 +268,7 @@
         const particlesContainer = document.getElementById('particles');
         const currencySelect = document.getElementById('currency');
         const startBtn = document.getElementById('start-mining');
+        const withdrawBtn = document.getElementById('withdraw-btn');
         let miningInterval;
 
         // بارگذاری مقدار استخراج از localStorage
@@ -222,7 +279,7 @@
             minedAmount += Math.random() * speed / 1000; // افزایش بر اساس سرعت
             minedElement.textContent = minedAmount.toFixed(8);
             localStorage.setItem('minedAmount', minedAmount); // ذخیره در localStorage
-            speedElement.textContent = speed.toFixed(2);
+            speedElement.textContent = speed.toFixed(6); // نمایش دقیق‌تر سرعت
         }
 
         function createParticle() {
@@ -249,6 +306,12 @@
             if (miningInterval) clearInterval(miningInterval);
             miningInterval = setInterval(() => updateMiner(speed), 2000);
             setInterval(createParticle, 500);
+        });
+
+        withdrawBtn.addEventListener('click', () => {
+            if (minedAmount < 1) {
+                alert('حداقل مقدار برداشت ۱ عدد می‌باشد!');
+            }
         });
     </script>
 </body>
