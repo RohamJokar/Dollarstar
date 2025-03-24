@@ -16,7 +16,7 @@
             align-items: center;
             min-height: 100vh;
             background: linear-gradient(135deg, #1e1e2f, #3a3a5a, #2a2a4a);
-            padding-top: 20px; /* فاصله از بالا */
+            padding-top: 20px;
         }
         .welcome-box {
             position: relative;
@@ -29,7 +29,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             text-align: center;
             overflow: hidden;
-            margin-bottom: 40px; /* فاصله از لینک‌ها */
+            margin-bottom: 40px;
         }
         .welcome-box::before {
             content: '';
@@ -198,7 +198,7 @@
         /* استایل لینک‌های گرافیکی */
         .link-container {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* ۴ ستون */
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             width: 80%;
             max-width: 1200px;
@@ -224,16 +224,63 @@
             background: rgba(0, 210, 255, 0.1);
             color: #fff;
         }
+
+        /* استایل درآمد */
+        .income-section {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 255, 210, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .income-section::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(0, 255, 210, 0.1), rgba(255, 255, 255, 0));
+            transform: rotate(30deg);
+            pointer-events: none;
+            animation: glow 6s infinite;
+        }
+        @keyframes glow {
+            0% { transform: rotate(30deg) translate(-20%, -20%); }
+            50% { transform: rotate(30deg) translate(20%, 20%); }
+            100% { transform: rotate(30deg) translate(-20%, -20%); }
+        }
+        .income-text {
+            font-size: 28px;
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(0, 255, 210, 0.7), 0 0 20px rgba(0, 210, 255, 0.5);
+            margin-bottom: 10px;
+            animation: pulse 2s infinite;
+        }
+        .income-subtext {
+            font-size: 20px;
+            color: #e0e0e0;
+            text-shadow: 0 0 5px rgba(0, 255, 210, 0.5);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body>
     <div class="welcome-box">
         <h1>خوش اومدی، User72!</h1>
         <p>ورودت موفقیت‌آمیز بود. اینجا صفحه اختصاصی توئه!</p>
-        <!-- نمایش ساعت آنلاین -->
         <div id="clock" class="clock"></div>
 
-        <!-- موزیک پلیر -->
         <div class="music-player">
             <div class="track-info" id="track-info">در حال پخش: ---</div>
             <div class="progress-bar" id="progress-bar">
@@ -252,7 +299,6 @@
         </div>
     </div>
 
-    <!-- لینک‌های گرافیکی -->
     <div class="link-container">
         <a href="#" class="link-box">گزینه ۱</a>
         <a href="#" class="link-box">گزینه ۲</a>
@@ -276,7 +322,12 @@
         <a href="#" class="link-box">گزینه ۲۰</a>
     </div>
 
-    <!-- منوی کشویی -->
+    <!-- بخش درآمد -->
+    <div class="income-section">
+        <div class="income-text">درآمد شما تا به این لحظه: 0.00 دلار</div>
+        <div class="income-subtext">به تومان: 0 تومان</div>
+    </div>
+
     <div class="menu">
         <button class="menu-btn">منو</button>
         <div class="dropdown">
@@ -289,7 +340,6 @@
     </div>
 
     <script>
-        // تابع برای نمایش ساعت آنلاین
         function updateClock() {
             const options = { timeZone: 'Asia/Tehran', hour12: false };
             const time = new Date().toLocaleString('fa-IR', options);
@@ -298,7 +348,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // اسکریپت موزیک پلیر
         const audio = new Audio();
         const playBtn = document.getElementById('play');
         const prevBtn = document.getElementById('prev');
