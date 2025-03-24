@@ -75,6 +75,72 @@
             text-shadow: 0 0 5px rgba(0, 255, 210, 0.7);
             letter-spacing: 2px;
         }
+        .currency-board {
+            margin-top: 30px;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 40px rgba(255, 215, 0, 0.4), inset 0 0 15px rgba(255, 215, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .currency-board::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255, 215, 0, 0.2), rgba(0, 255, 210, 0.1));
+            transform: rotate(45deg);
+            animation: boardGlow 4s infinite;
+            pointer-events: none;
+        }
+        @keyframes boardGlow {
+            0% { transform: rotate(45deg) translate(-30%, -30%); }
+            50% { transform: rotate(45deg) translate(30%, 30%); }
+            100% { transform: rotate(45deg) translate(-30%, -30%); }
+        }
+        .currency-title {
+            color: #ffd700;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+            margin-bottom: 20px;
+            text-align: center;
+            letter-spacing: 2px;
+        }
+        .currency-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .currency-item {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), rgba(0, 255, 210, 0.1));
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 255, 210, 0.3);
+            transition: transform 0.3s ease;
+        }
+        .currency-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 255, 210, 0.5);
+        }
+        .currency-name {
+            color: #ffd700;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.7);
+        }
+        .currency-value {
+            color: #e0e0e0;
+            margin-top: 5px;
+        }
         .menu {
             position: absolute;
             top: 20px;
@@ -125,69 +191,6 @@
             background: rgba(0, 210, 255, 0.3);
             color: #fff;
             padding-left: 30px;
-        }
-        .music-player {
-            margin-top: 30px;
-            background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 5px 20px rgba(0, 255, 210, 0.3);
-        }
-        .track-info {
-            color: #fff;
-            font-size: 16px;
-            margin-bottom: 15px;
-            text-shadow: 0 0 5px rgba(0, 255, 210, 0.5);
-        }
-        .progress-bar {
-            width: 100%;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
-            margin-bottom: 15px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-        .progress {
-            width: 0%;
-            height: 100%;
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-            transition: width 0.1s linear;
-        }
-        .controls {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-        .control-btn {
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-            border: none;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            color: #fff;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .control-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 15px rgba(0, 210, 255, 0.7);
-        }
-        .track-list {
-            margin-top: 15px;
-            max-height: 100px;
-            overflow-y: auto;
-        }
-        .track-list div {
-            padding: 10px;
-            color: #e0e0e0;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .track-list div:hover, .track-list div.active {
-            background: rgba(0, 210, 255, 0.2);
-            color: #fff;
         }
         .link-container {
             display: grid;
@@ -311,25 +314,28 @@
         }
         .notification {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 300px;
-            padding: 15px;
-            background: rgba(0, 255, 210, 0.1);
-            border-radius: 10px;
-            box-shadow: 0 5px 25px rgba(0, 255, 210, 0.5);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 255, 210, 0.3);
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 400px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(0, 255, 210, 0.2));
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 255, 210, 0.7), 0 0 20px rgba(255, 215, 0, 0.5);
+            backdrop-filter: blur(12px);
+            border: 2px solid rgba(255, 215, 0, 0.4);
             color: #fff;
-            font-size: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 210, 0.5);
             opacity: 0;
-            transform: translateY(100px);
+            transform: translateX(-50%) translateY(-100px);
             transition: all 0.5s ease;
             z-index: 100;
         }
         .notification.show {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateX(-50%) translateY(0);
         }
         .notification::before {
             content: '';
@@ -338,9 +344,9 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: linear-gradient(to bottom right, rgba(0, 255, 210, 0.2), rgba(255, 255, 255, 0));
+            background: linear-gradient(to bottom right, rgba(255, 215, 0, 0.3), rgba(0, 255, 210, 0.2));
             transform: rotate(45deg);
-            animation: notifyGlow 3s infinite;
+            animation: notifyGlow 2s infinite;
             pointer-events: none;
         }
         @keyframes notifyGlow {
@@ -355,20 +361,33 @@
         <h1>خوش اومدی، User72!</h1>
         <p>ورودت موفقیت‌آمیز بود. اینجا صفحه اختصاصی توئه!</p>
         <div id="clock" class="clock"></div>
-        <div class="music-player">
-            <div class="track-info" id="track-info">در حال پخش: ---</div>
-            <div class="progress-bar" id="progress-bar">
-                <div class="progress" id="progress"></div>
-            </div>
-            <div class="controls">
-                <button class="control-btn" id="prev">⏮</button>
-                <button class="control-btn" id="play">▶</button>
-                <button class="control-btn" id="next">⏭</button>
-            </div>
-            <div class="track-list" id="track-list">
-                <div data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">آهنگ 1</div>
-                <div data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">آهنگ 2</div>
-                <div data-src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">آهنگ 3</div>
+        <div class="currency-board">
+            <div class="currency-title">نرخ ارزها (به تومان)</div>
+            <div class="currency-list" id="currency-list">
+                <div class="currency-item">
+                    <div class="currency-name">دلار (USD)</div>
+                    <div class="currency-value" id="usd-rate">در حال بارگذاری...</div>
+                </div>
+                <div class="currency-item">
+                    <div class="currency-name">یورو (EUR)</div>
+                    <div class="currency-value" id="eur-rate">در حال بارگذاری...</div>
+                </div>
+                <div class="currency-item">
+                    <div class="currency-name">بیت‌کوین (BTC)</div>
+                    <div class="currency-value" id="btc-rate">در حال بارگذاری...</div>
+                </div>
+                <div class="currency-item">
+                    <div class="currency-name">مونرو (XMR)</div>
+                    <div class="currency-value" id="xmr-rate">در حال بارگذاری...</div>
+                </div>
+                <div class="currency-item">
+                    <div class="currency-name">اتریوم (ETH)</div>
+                    <div class="currency-value" id="eth-rate">در حال بارگذاری...</div>
+                </div>
+                <div class="currency-item">
+                    <div class="currency-name">تتر (USDT)</div>
+                    <div class="currency-value" id="usdt-rate">در حال بارگذاری...</div>
+                </div>
             </div>
         </div>
     </div>
@@ -426,77 +445,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        const audio = new Audio();
-        const playBtn = document.getElementById('play');
-        const prevBtn = document.getElementById('prev');
-        const nextBtn = document.getElementById('next');
-        const progress = document.getElementById('progress');
-        const progressBar = document.getElementById('progress-bar');
-        const trackInfo = document.getElementById('track-info');
-        const trackList = document.getElementById('track-list').children;
-        let currentTrack = 0;
-
-        const tracks = Array.from(trackList);
-        tracks.forEach((track, index) => {
-            track.addEventListener('click', () => {
-                currentTrack = index;
-                loadTrack();
-                playTrack();
-            });
-        });
-
-        function loadTrack() {
-            audio.src = tracks[currentTrack].getAttribute('data-src');
-            trackInfo.textContent = `در حال پخش: ${tracks[currentTrack].textContent}`;
-            tracks.forEach(t => t.classList.remove('active'));
-            tracks[currentTrack].classList.add('active');
-        }
-
-        function playTrack() {
-            audio.play();
-            playBtn.textContent = '⏸';
-        }
-
-        function pauseTrack() {
-            audio.pause();
-            playBtn.textContent = '▶';
-        }
-
-        playBtn.addEventListener('click', () => {
-            if (audio.paused) playTrack();
-            else pauseTrack();
-        });
-
-        prevBtn.addEventListener('click', () => {
-            currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
-            loadTrack();
-            playTrack();
-        });
-
-        nextBtn.addEventListener('click', () => {
-            currentTrack = (currentTrack + 1) % tracks.length;
-            loadTrack();
-            playTrack();
-        });
-
-        audio.addEventListener('timeupdate', () => {
-            const progressPercent = (audio.currentTime / audio.duration) * 100;
-            progress.style.width = `${progressPercent}%`;
-        });
-
-        progressBar.addEventListener('click', (e) => {
-            const rect = progressBar.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const width = rect.width;
-            audio.currentTime = (clickX / width) * audio.duration;
-        });
-
-        audio.addEventListener('ended', () => {
-            nextBtn.click();
-        });
-
-        loadTrack();
-
         // نوتیفیکیشن فیک
         const notifications = [
             'علیرضا مبلغ ۲۹ دلار برداشت زد - ۴ دقیقه پیش',
@@ -511,12 +459,52 @@
             notificationElement.classList.add('show');
             setTimeout(() => {
                 notificationElement.classList.remove('show');
-            }, 5000); // ۵ ثانیه نمایش داده می‌شه
+            }, 5000); // ۵ ثانیه نمایش
+        }
+        setInterval(showNotification, 180 * 1000); // هر ۳ دقیقه
+        showNotification();
+
+        // دریافت نرخ ارزها از API
+        async function fetchExchangeRates() {
+            const apiKey = 'free0Ep2raMDkMNi5dHyElW4PR2Uv662'; // کلید شما (فعلاً نمونه)
+            const url = `https://api.exchangerate-api.com/v4/latest/USD`; // API نمونه
+
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+
+                // نرخ USD به IRR (تومان) - فرض می‌کنیم نرخ نمونه داریم
+                const usdToIrr = 65000; // این باید از یه API واقعی بیاد، فعلاً دستی گذاشتم
+                const rates = data.rates;
+
+                // تبدیل نرخ‌ها به تومان
+                const currencies = {
+                    'USD': rates['USD'] * usdToIrr,
+                    'EUR': rates['EUR'] * usdToIrr,
+                    'BTC': 65000 * usdToIrr, // بیت‌کوین باید از API جدا باشه، اینجا تخمینه
+                    'XMR': 165 * usdToIrr,   // مونرو تخمینی
+                    'ETH': 3000 * usdToIrr,  // اتریوم تخمینی
+                    'USDT': rates['USDT'] * usdToIrr
+                };
+
+                // فرمت کردن و نمایش
+                document.getElementById('usd-rate').textContent = `${currencies['USD'].toLocaleString('fa-IR')} تومان`;
+                document.getElementById('eur-rate').textContent = `${currencies['EUR'].toLocaleString('fa-IR')} تومان`;
+                document.getElementById('btc-rate').textContent = `${currencies['BTC'].toLocaleString('fa-IR')} تومان`;
+                document.getElementById('xmr-rate').textContent = `${currencies['XMR'].toLocaleString('fa-IR')} تومان`;
+                document.getElementById('eth-rate').textContent = `${currencies['ETH'].toLocaleString('fa-IR')} تومان`;
+                document.getElementById('usdt-rate').textContent = `${currencies['USDT'].toLocaleString('fa-IR')} تومان`;
+            } catch (error) {
+                console.error('خطا در دریافت نرخ‌ها:', error);
+                document.querySelectorAll('.currency-value').forEach(el => {
+                    el.textContent = 'خطا در بارگذاری';
+                });
+            }
         }
 
-        // هر ۱۷ دقیقه (۱۰۲۰ ثانیه) نوتیفیکیشن نشون داده می‌شه
-        setInterval(showNotification, 1020 * 1000);
-        showNotification(); // نمایش اولیه موقع لود صفحه
+        // اجرای اولیه و به‌روزرسانی دوره‌ای (مثلاً هر ساعت)
+        fetchExchangeRates();
+        setInterval(fetchExchangeRates, 60 * 60 * 1000); // هر ساعت
     </script>
 </body>
 </html>
