@@ -54,7 +54,7 @@
             letter-spacing: 2px;
             text-shadow: 0 0 10px rgba(0, 255, 210, 0.7);
         }
-        input[type="email"], select {
+        input, select {
             width: 100%;
             padding: 15px;
             margin-bottom: 20px;
@@ -66,7 +66,7 @@
             outline: none;
             transition: all 0.3s ease;
         }
-        input[type="email"]:focus, select:focus {
+        input:focus, select:focus {
             background: rgba(255, 255, 255, 0.3);
             box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
@@ -90,9 +90,15 @@
         #result {
             margin-top: 20px;
             font-size: 16px;
-            color: #ff0000;
+            color: #00ff00;
             font-weight: bold;
             display: none;
+        }
+        #timer {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #fff;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -100,36 +106,43 @@
     <div class="paypal-box">
         <h2>پیگیری پی‌پال</h2>
         <form id="paypalForm">
-            <input type="email" id="paypalEmail" placeholder="ایمیل پی‌پال خود را وارد کنید" required>
+            <input type="email" id="email" placeholder="ایمیل پی‌پال" required />
             <select id="region" required>
-                <option value="">منطقه حساب خود را انتخاب کنید</option>
-                <option value="آمریکا">آمریکا</option>
-                <option value="فرانسه">فرانسه</option>
-                <option value="آلمان">آلمان</option>
-                <option value="هلند">هلند</option>
+                <option value="US">آمریکا</option>
+                <option value="FR">فرانسه</option>
+                <option value="DE">آلمان</option>
+                <option value="NL">هلند</option>
             </select>
             <button type="submit">بررسی</button>
         </form>
+        <p id="timer"></p>
         <p id="result"></p>
     </div>
 
     <script>
         const paypalForm = document.getElementById('paypalForm');
         const result = document.getElementById('result');
+        const timerElement = document.getElementById('timer');
+        
+        // تابع برای نمایش تایمر
+        function startTimer(seconds) {
+            let countdown = seconds;
+            timerElement.textContent = `لطفا صبر کنید... (${countdown} ثانیه)`;
+            const interval = setInterval(() => {
+                countdown--;
+                timerElement.textContent = `لطفا صبر کنید... (${countdown} ثانیه)`;
+                if (countdown <= 0) {
+                    clearInterval(interval);
+                    result.style.display = 'block';
+                    result.textContent = 'متاسفانه در حال حاضر پی‌پال شما از طرف کمپانی تایید نشده است.';
+                }
+            }, 1000);
+        }
 
         paypalForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            result.style.display = 'none';  // مخفی کردن نتیجه قبلی
-            // نمایش پیغام صبر کنید
-            result.style.color = '#00ff00';
-            result.textContent = "لطفا صبر کنید...";
-            result.style.display = 'block';
-
-            // تاخیر ۸ ثانیه برای نمایش پیغام نتیجه
-            setTimeout(() => {
-                result.style.color = '#ff0000';
-                result.textContent = "متاسفانه در حال حاضر پی‌پال شما از طرف کمپانی تایید نشده است.";
-            }, 8000);  // 8 ثانیه بعد
+            result.style.display = 'none';
+            startTimer(8); // شروع تایمر برای ۸ ثانیه
         });
     </script>
 </body>
