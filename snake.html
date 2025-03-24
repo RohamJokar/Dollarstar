@@ -55,6 +55,7 @@
             border-radius: 10px;
             background: rgba(0, 0, 0, 0.8);
             box-shadow: 0 0 30px rgba(0, 210, 255, 0.5);
+            margin-bottom: 20px;
         }
         .overlay {
             position: absolute;
@@ -71,6 +72,53 @@
             50% { transform: translateY(50%); }
             100% { transform: translateY(-50%); }
         }
+        .controller {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .controller-row {
+            display: flex;
+            gap: 10px;
+        }
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0, 210, 255, 0.5);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .control-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 10px 20px rgba(0, 210, 255, 0.7);
+            background: linear-gradient(90deg, #3a7bd5, #00d2ff);
+        }
+        .control-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.2), rgba(0, 0, 0, 0));
+            transform: rotate(45deg);
+            animation: btnShine 3s infinite;
+            pointer-events: none;
+        }
+        @keyframes btnShine {
+            0% { transform: rotate(45deg) translate(-30%, -30%); }
+            50% { transform: rotate(45deg) translate(30%, 30%); }
+            100% { transform: rotate(45deg) translate(-30%, -30%); }
+        }
     </style>
 </head>
 <body>
@@ -79,6 +127,18 @@
         <div class="goal">هدف امروز: ۹۰ دلار</div>
         <canvas id="gameCanvas" width="600" height="400"></canvas>
         <div class="overlay"></div>
+        <div class="controller">
+            <div class="controller-row">
+                <button class="control-btn" id="upBtn">↑</button>
+            </div>
+            <div class="controller-row">
+                <button class="control-btn" id="leftBtn">←</button>
+                <button class="control-btn" id="rightBtn">→</button>
+            </div>
+            <div class="controller-row">
+                <button class="control-btn" id="downBtn">↓</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -92,15 +152,14 @@
         let dx = 0;
         let dy = 0;
         let score = 0;
-        let speed = 100; // سرعت بالا برای سختی بیشتر
+        let speed = 100; // سرعت بالا برای سختی
         let obstacles = [
             { x: 5, y: 5 }, { x: 5, y: 6 }, { x: 5, y: 7 },
             { x: 25, y: 15 }, { x: 25, y: 16 }, { x: 25, y: 17 },
             { x: 15, y: 25 }, { x: 16, y: 25 }, { x: 17, y: 25 }
-        ]; // موانع ثابت
+        ];
 
         function drawGame() {
-            // حرکت مار
             const head = { x: snake[0].x + dx, y: snake[0].y + dy };
             snake.unshift(head);
 
@@ -111,7 +170,6 @@
                 snake.pop();
             }
 
-            // چک کردن برخورد
             if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount ||
                 snake.slice(1).some(segment => segment.x === head.x && segment.y === head.y) ||
                 obstacles.some(ob => ob.x === head.x && ob.y === head.y)) {
@@ -123,11 +181,9 @@
                 generateFood();
             }
 
-            // رسم پس‌زمینه
             ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // رسم موانع
             ctx.fillStyle = 'rgba(255, 0, 0, 0.8)';
             obstacles.forEach(ob => {
                 ctx.beginPath();
@@ -135,7 +191,6 @@
                 ctx.fill();
             });
 
-            // رسم مار با گرافیک
             snake.forEach((segment, index) => {
                 ctx.fillStyle = index === 0 ? '#00d2ff' : '#3a7bd5';
                 ctx.beginPath();
@@ -145,13 +200,11 @@
                 ctx.stroke();
             });
 
-            // رسم غذا
             ctx.fillStyle = '#ffd700';
             ctx.beginPath();
             ctx.arc(food.x * gridSize + gridSize / 2, food.y * gridSize + gridSize / 2, gridSize / 2, 0, Math.PI * 2);
             ctx.fill();
 
-            // نمایش امتیاز
             ctx.fillStyle = '#fff';
             ctx.font = '20px Arial';
             ctx.fillText('امتیاز: ' + score, 10, 30);
@@ -168,6 +221,26 @@
             }
         }
 
+        // کنترل با دکمه‌ها
+        const upBtn = document.getElementById('upBtn');
+        const downBtn = document.getElementById('downBtn');
+        const leftBtn = document.getElementById('leftBtn');
+        const rightBtn = document.getElementById('rightBtn');
+
+        upBtn.addEventListener('click', () => {
+            if (dy === 0) { dx = 0; dy = -1; }
+        });
+        downBtn.addEventListener('click', () => {
+            if (dy === 0) { dx = 0; dy = 1; }
+        });
+        leftBtn.addEventListener('click', () => {
+            if (dx === 0) { dx = -1; dy = 0; }
+        });
+        rightBtn.addEventListener('click', () => {
+            if (dx === 0) { dx = 1; dy = 0; }
+        });
+
+        // همچنان کنترل با کیبورد هم فعال باشه
         document.addEventListener('keydown', e => {
             switch (e.key) {
                 case 'ArrowUp': if (dy === 0) { dx = 0; dy = -1; } break;
